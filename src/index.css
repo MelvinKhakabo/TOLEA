@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #FBF6EC;
+  --color-ink: #241A12;
+  --color-marigold: #E8A331;
+  --color-forest: #2B6E4F;
+  --color-indigo: #233A5E;
+  --color-taupe: #8C8073;
+
+  --font-display: "Unbounded", sans-serif;
+  --font-sans: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
