@@ -1,4 +1,6 @@
 import { Link, Outlet } from 'react-router-dom'
+import Footer from './Footer'
+import ScrollToTop from './ScrollToTop'
 
 const primaryNav = [
   { label: 'Volunteer', to: '/volunteer' },
@@ -17,7 +19,7 @@ const secondaryNav = [
 
 export default function Layout() {
   return (
-    <div className="min-h-screen bg-ivory text-ink font-sans">
+    <div className="min-h-screen bg-ivory text-ink font-sans flex flex-col">
       <header className="border-b border-taupe/30">
         <div className="flex items-center justify-between px-6 py-4">
           <Link to="/" className="font-display text-xl text-marigold">
@@ -44,9 +46,12 @@ export default function Layout() {
         </div>
       </header>
 
-      <main>
+      <main className="flex-1">
         <Outlet />
       </main>
+
+      <Footer />
+      <ScrollToTop />
     </div>
   )
 }

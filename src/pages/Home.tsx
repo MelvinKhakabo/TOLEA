@@ -1,33 +1,25 @@
 import { Link } from 'react-router-dom';
-import Nav from '../components/Nav';
 import Button from '../components/Button';
-import FootCta from '../components/FootCta';
+import CtaBanner from '../components/CtaBanner';
 import { SDGS } from '../lib/sdgs';
 
-const stats = [
-  { num: '50+', label: 'companies partnered' },
-  { num: '100+', label: 'volunteers placed' },
-  { num: '95%', label: 'satisfaction rate' },
-];
+const stats = ['50+ companies partnered', '100+ volunteers placed', '95% satisfaction rate'];
 
 const steps = [
   {
     num: '01',
     title: 'Tell us your goals',
     body: 'A 5-minute questionnaire on your skills, time, and what you want to build.',
-    cap: 'photo: interview panel',
   },
   {
     num: '02',
     title: 'Get matched',
     body: 'We surface your 3 best-fit, verified opportunities.',
-    cap: 'photo: phone with match notification',
   },
   {
     num: '03',
     title: 'Apply and grow',
     body: 'Apply, get placed, and watch your skills journal fill up.',
-    cap: 'photo: volunteer at work',
   },
 ];
 
@@ -97,133 +89,195 @@ const faqs = [
   },
 ];
 
+function Marquee({ items }: { items: string[] }) {
+  const doubled = [...items, ...items];
+  return (
+    <div
+      className="overflow-hidden py-10"
+      style={{
+        WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+        maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+      }}
+    >
+      <style>{`
+        @keyframes tolea-marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+      `}</style>
+      <div className="flex w-max gap-14" style={{ animation: 'tolea-marquee 24s linear infinite' }}>
+        {doubled.map((text, i) => (
+          <span
+            key={i}
+            className="flex items-center gap-4 font-display font-bold text-xl md:text-2xl whitespace-nowrap"
+            style={{ color: 'rgba(36,26,18,0.75)' }}
+          >
+            {text}
+            <span style={{ color: '#E8A331' }} className="text-base">●</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const BAND = '#EFEAE1'; // same tint About uses for its alternating sections
+
 export default function Home() {
   return (
-    <div className="bg-ivory">
-      <Nav />
-
-      {/* Hero */}
-      <div className="flex gap-9 items-center px-9 pt-[52px] flex-col md:flex-row">
-        <div className="flex-[1.1] w-full">
-          <div className="font-mono text-[10.5px] text-forest mb-3 lowercase">
+    <div>
+      {/* Hero — full-bleed, dark overlay, centered (unchanged) */}
+      <div
+        className="relative flex items-center justify-center text-center px-6 py-28 md:py-36"
+        style={{
+          background:
+            'linear-gradient(rgba(36,26,18,0.6), rgba(36,26,18,0.72)), radial-gradient(circle at 30% 30%, rgba(232,163,49,0.35), transparent 55%), radial-gradient(circle at 75% 70%, rgba(43,110,79,0.3), transparent 55%), linear-gradient(135deg, #e9ded0, #cfc3ad)',
+        }}
+      >
+        <div className="max-w-2xl">
+          <div className="font-mono text-[11px] mb-4 lowercase tracking-wide" style={{ color: '#E8A331' }}>
             free for kenyan volunteers, always
           </div>
-          <h1 className="font-display font-bold text-[34px] leading-[1.15] -tracking-[0.01em] mb-4">
-            Build real skills.
-            <br />
-            Find your people.
-            <br />
-            Move your future forward.
+          <h1 className="font-display font-bold text-white text-[32px] md:text-[46px] leading-[1.15] mb-5">
+            Build real skills. Find your people. Move your future forward.
           </h1>
-          <p className="text-[13.5px] text-[#4a4038] leading-[1.65] mb-5 max-w-[420px]">
+          <p className="text-sm md:text-base leading-[1.65] mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.85)' }}>
             Tolea matches you with verified organisations across Kenya, and tracks every skill you
             build along the way.
           </p>
-          <div className="flex gap-2.5">
+          <div className="flex gap-3 justify-center flex-wrap">
             <Link to="/volunteer">
               <Button variant="primary">Find your opportunity</Button>
             </Link>
             <Link to="/organizations">
-              <Button variant="secondary">For organisations</Button>
+              <button
+                className="font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md"
+                style={{ background: '#fff', color: '#241A12' }}
+              >
+                For organisations
+              </button>
             </Link>
           </div>
         </div>
-        <div className="imgph flex-1 h-[270px] w-full" data-cap="photography: volunteers, warm daylight" />
       </div>
 
-      {/* Stats */}
-      <div className="flex border-t border-b border-line px-9 py-6 mt-10">
-        {stats.map((s) => (
-          <div key={s.label} className="flex-1">
-            <div className="font-display font-extrabold text-[26px] text-forest">{s.num}</div>
-            <div className="font-mono text-[10px] text-taupe mt-1">{s.label}</div>
+      {/* Stats band */}
+      <div style={{ background: BAND }}>
+        <Marquee items={stats} />
+        <div className="flex items-center gap-3.5 pb-8 px-9">
+          <span className="font-mono text-[10.5px]" style={{ color: '#8C8073' }}>
+            aligned with the un sdgs
+          </span>
+          <div className="flex gap-1.5">
+            {SDGS.map((sdg) => (
+              <div
+                key={sdg.number}
+                className="w-[24px] h-[24px] rounded-[5px] flex items-center justify-center font-display font-extrabold text-[9.5px] text-white"
+                style={{ background: sdg.color }}
+              >
+                {sdg.number}
+              </div>
+            ))}
           </div>
-        ))}
+          <Link to="/about" className="text-[11.5px]" style={{ color: '#8C8073' }}>
+            Learn more →
+          </Link>
+        </div>
       </div>
 
-      {/* SDG strip */}
-      <div className="flex items-center gap-3.5 px-9 py-4.5 border-t border-line">
-        <span className="font-mono text-[10.5px] text-taupe">aligned with the un sdgs</span>
-        <div className="flex gap-1.5">
-          {SDGS.map((sdg) => (
-            <div
-              key={sdg.number}
-              className="w-[26px] h-[26px] rounded-[5px] flex items-center justify-center font-display font-extrabold text-[10.5px] text-white"
-              style={{ background: sdg.color }}
-            >
-              {sdg.number}
+      {/* How it works — ivory band, full width, left-aligned */}
+      <div className="px-9 py-14">
+        <div className="mb-8">
+          <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#2B6E4F' }}>
+            the process
+          </div>
+          <h2 className="font-display font-bold text-2xl max-w-xl">
+            From goals to a verified placement, in three steps
+          </h2>
+        </div>
+        <div className="flex gap-8 flex-col md:flex-row mb-10">
+          {steps.map((s) => (
+            <div key={s.num} className="flex-1">
+              <div className="font-mono text-[11px] mb-2" style={{ color: '#233A5E' }}>
+                {s.num}
+              </div>
+              <h3 className="font-display font-bold text-lg mb-1.5">{s.title}</h3>
+              <p className="text-[12.5px] m-0" style={{ color: '#5a5347' }}>
+                {s.body}
+              </p>
             </div>
           ))}
         </div>
-        <Link to="/about" className="text-[11.5px] text-taupe cursor-pointer">
-          Learn more →
-        </Link>
-      </div>
 
-      {/* How it works */}
-      <div className="flex gap-4 px-9 pt-[30px] pb-[30px] flex-col md:flex-row">
-        {steps.map((s) => (
-          <div key={s.num} className="flex-1">
-            <div className="imgph h-[110px] mb-3" data-cap={s.cap} />
-            <div className="font-mono text-[11px] text-indigo mb-2">{s.num}</div>
-            <h2 className="font-display font-bold text-lg mb-1.5">{s.title}</h2>
-            <p className="text-[12.5px] text-umber-soft m-0">{s.body}</p>
+        <div className="max-w-xl bg-marigold-soft rounded-[10px] px-6.5 py-5.5 text-sm leading-[1.6]">
+          "I found my placement in a week, and it was the first time volunteering felt like it was
+          actually building toward something."
+          <div className="font-mono text-[10.5px] mt-2.5" style={{ color: '#5a5347' }}>
+            Early Tolea volunteer, Nairobi
           </div>
-        ))}
-      </div>
-
-      {/* Quote */}
-      <div className="mx-9 mb-[30px] bg-marigold-soft rounded-[10px] px-6.5 py-5.5 text-sm leading-[1.6]">
-        "I found my placement in a week, and it was the first time volunteering felt like it was
-        actually building toward something."
-        <div className="font-mono text-[10.5px] text-umber-soft mt-2.5">
-          Early Tolea volunteer, Nairobi
         </div>
       </div>
 
-      {/* The Tolea way */}
-      <div className="px-9 pt-9 pb-1">
-        <div className="font-mono text-[10.5px] text-forest mb-3 lowercase">the tolea way</div>
-        <h2 className="font-display font-bold text-xl">
-          Safety and support built into every placement
-        </h2>
-      </div>
-      <div className="flex gap-3.5 px-9 pt-3.5 pb-[30px] flex-col md:flex-row">
-        {wayCards.map((c) => (
-          <div key={c.title} className="flex-1 border border-line rounded-[10px] p-4 bg-white">
-            <div className="w-[34px] h-[34px] rounded-lg bg-forest-soft text-forest flex items-center justify-center mb-3">
-              {c.icon}
-            </div>
-            <h3 className="font-sans font-bold text-[13.5px] mb-1.5">{c.title}</h3>
-            <p className="text-[11.5px] text-umber-soft m-0 leading-[1.55]">{c.body}</p>
+      {/* The Tolea way — tinted band, full width, left-aligned */}
+      <div style={{ background: BAND }} className="px-9 py-14">
+        <div className="mb-8">
+          <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#2B6E4F' }}>
+            the tolea way
           </div>
-        ))}
-      </div>
-
-      {/* FAQ */}
-      <div className="px-9 pt-9 pb-1">
-        <div className="font-mono text-[10.5px] text-forest mb-3 lowercase">faqs</div>
-        <h2 className="font-display font-bold text-xl">Common questions</h2>
-      </div>
-      <div className="px-9 pt-2.5 pb-[34px]">
-        {faqs.map((f) => (
-          <details key={f.q} className="border-t border-line py-4 group last:border-b">
-            <summary className="font-sans font-semibold text-[13.5px] flex justify-between items-center cursor-pointer list-none">
-              <span>{f.q}</span>
-              <span className="font-mono text-taupe text-[15px] group-open:hidden">+</span>
-              <span className="font-mono text-taupe text-[15px] hidden group-open:inline">−</span>
-            </summary>
-            <div className="text-xs text-umber-soft mt-2.5 leading-[1.6] max-w-[600px]">{f.a}</div>
-            <div className="font-mono text-[9.5px] text-taupe mt-1.5">
-              auto-populated from policy doc
+          <h2 className="font-display font-bold text-2xl max-w-xl">
+            Safety and support built into every placement
+          </h2>
+        </div>
+        <div className="flex gap-3.5 flex-col md:flex-row">
+          {wayCards.map((c) => (
+            <div key={c.title} className="flex-1 border border-line rounded-[10px] p-4 bg-white">
+              <div className="w-[34px] h-[34px] rounded-lg bg-forest-soft text-forest flex items-center justify-center mb-3">
+                {c.icon}
+              </div>
+              <h3 className="font-sans font-bold text-[13.5px] mb-1.5">{c.title}</h3>
+              <p className="text-[11.5px] text-umber-soft m-0 leading-[1.55]">{c.body}</p>
             </div>
-          </details>
-        ))}
+          ))}
+        </div>
       </div>
 
-      <FootCta
-        message="Hosting talent? List a role and reach graduates ready to build real skills with your organisation."
+      {/* FAQ — ivory band, full width, left-aligned */}
+      <div className="py-14 px-9">
+        <div className="mb-8">
+          <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#2B6E4F' }}>
+            faqs
+          </div>
+          <h2 className="font-display font-bold text-2xl max-w-xl">Common questions</h2>
+        </div>
+        <div className="max-w-2xl" style={{ borderTop: '1px solid rgba(36,26,18,0.1)' }}>
+          {faqs.map((f) => (
+            <details
+              key={f.q}
+              className="group py-5"
+              style={{ borderBottom: '1px solid rgba(36,26,18,0.1)' }}
+            >
+              <summary className="font-sans font-semibold text-[13.5px] flex justify-between items-center cursor-pointer list-none">
+                <span>{f.q}</span>
+                <span className="font-mono text-base group-open:hidden" style={{ color: '#8C8073' }}>
+                  +
+                </span>
+                <span className="font-mono text-base hidden group-open:inline" style={{ color: '#8C8073' }}>
+                  −
+                </span>
+              </summary>
+              <div className="text-xs mt-3 leading-[1.6]" style={{ color: '#5a5347' }}>
+                {f.a}
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <CtaBanner
+        eyebrow="hosting talent?"
+        headline="List a role and reach graduates ready to build real skills"
         buttonLabel="Register your organisation"
+        to="/organizations"
       />
     </div>
   );
