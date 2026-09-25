@@ -1,20 +1,47 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 @theme {
   --color-ivory: #FBF6EC;
-  --color-ink: #241A12;
+  --color-umber: #241A12;
+  --color-umber-soft: #5a5347;
   --color-marigold: #E8A331;
+  --color-marigold-soft: #FBEBD1;
   --color-forest: #2B6E4F;
+  --color-forest-soft: #E4EEE7;
   --color-indigo: #233A5E;
+  --color-indigo-soft: #E5E9F0;
   --color-taupe: #8C8073;
+  --color-taupe-soft: #EFEAE1;
+  --color-line: #E3DACB;
 
-  --font-display: "Unbounded", sans-serif;
-  --font-sans: "IBM Plex Sans", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-display: 'Unbounded', sans-serif;
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
 }
 
 body {
-  background-color: var(--color-ivory);
-  color: var(--color-ink);
+  margin: 0;
   font-family: var(--font-sans);
+  background: var(--color-ivory);
+  color: var(--color-umber);
+}
+
+.imgph {
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(232,163,49,0.30), transparent 55%),
+    radial-gradient(circle at 75% 70%, rgba(43,110,79,0.26), transparent 55%),
+    linear-gradient(135deg, #e9ded0, #cfc3ad);
+}
+.imgph::after {
+  content: attr(data-cap);
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: #5a4f3d;
 }
