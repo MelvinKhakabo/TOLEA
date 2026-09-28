@@ -6,11 +6,22 @@ export default function CtaBanner({
   headline,
   buttonLabel,
   to,
+  secondaryText = 'Need more information?',
+  secondaryLinkLabel,
+  secondaryHref,
 }: {
   eyebrow?: string;
   headline: string;
   buttonLabel: string;
   to: string;
+  /** Optional plain-text line under the primary button, e.g.
+   *  "Need more information? Make an Enquiry" — same treatment as the
+   *  Organizations hero's login/enquiry line. Pass secondaryLinkLabel +
+   *  secondaryHref to show it; omit both and nothing changes for pages
+   *  that don't pass them. secondaryText overrides the lead-in wording. */
+  secondaryText?: string;
+  secondaryLinkLabel?: string;
+  secondaryHref?: string;
 }) {
   return (
     <div className="px-9 py-16 text-center" style={{ background: '#F1EAD9' }}>
@@ -25,9 +36,19 @@ export default function CtaBanner({
       >
         {headline}
       </h2>
-      <Link to={to}>
-        <Button variant="primary">{buttonLabel}</Button>
-      </Link>
+      <div className="flex flex-col items-center gap-2.5">
+        <Link to={to}>
+          <Button variant="primary">{buttonLabel}</Button>
+        </Link>
+        {secondaryLinkLabel && secondaryHref && (
+          <div className="text-[11.5px]" style={{ color: 'rgba(36,26,18,0.65)' }}>
+            {secondaryText}{' '}
+            <a href={secondaryHref} className="underline cursor-pointer" style={{ color: '#241A12' }}>
+              {secondaryLinkLabel}
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
