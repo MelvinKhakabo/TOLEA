@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import CtaBanner from '../components/CtaBanner';
@@ -20,21 +21,41 @@ const pathway = [
   },
 ];
 
-const reviews = [
+// Drop each volunteer's photo path/URL in `image` (e.g. an import from
+// src/assets, or a string path into your public/ folder). Leave it undefined
+// and the card falls back to the placeholder gradient — nothing else to change.
+const volunteers = [
   {
+    name: 'Patricia N.',
+    role: 'Community Health Intern',
+    org: 'Nairobi Community Health Trust',
+    image: undefined as string | undefined, // e.g. '/volunteers/patricia.jpg'
     quote:
       "Volunteering here didn't feel like free labour. There were real expectations, and real support when things got hard.",
-    name: 'Patricia, Kenya',
   },
   {
+    name: 'Brian K.',
+    role: 'Software Volunteer',
+    org: 'Kibera Youth Tech Hub',
+    image: undefined as string | undefined,
     quote:
       'I found my placement in a week, and it was the first time volunteering felt like it was actually building toward something.',
-    name: 'Brian, Nairobi',
   },
   {
+    name: 'Sofia R.',
+    role: 'Education Volunteer',
+    org: 'Diani Coastal Learning Center',
+    image: undefined as string | undefined,
     quote:
       'Coming from abroad, I was nervous about legitimacy. The verification process and check-ins made it feel safe the whole way through.',
-    name: 'Sofia, International volunteer',
+  },
+  {
+    name: 'Derek O.',
+    role: 'Policy Research Intern',
+    org: 'Nairobi Governance Lab',
+    image: undefined as string | undefined,
+    quote:
+      'The skills journal was the difference. I could point to exactly what I did, not just say I "volunteered somewhere."',
   },
 ];
 
@@ -128,6 +149,55 @@ function PathwayConnector() {
   );
 }
 
+/** Crimson-Education-style card: placement label, photo with a quote revealed
+ *  on hover (desktop) or tap (touch), then name/role in a "filled-in form" style. */
+function VolunteerCard({ v }: { v: (typeof volunteers)[number] }) {
+  const [active, setActive] = useState(false);
+
+  return (
+    <div className="border border-line rounded-[10px] bg-white overflow-hidden flex flex-col h-full">
+      <div className="pt-4 pb-2.5 px-3 text-center flex flex-col justify-center min-h-[76px]">
+        <div className="font-sans text-[12px] text-umber-soft">Placed at</div>
+        <div className="font-display font-bold text-[15px] text-forest leading-tight">
+          {v.org}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setActive((a) => !a)}
+        className="group relative block w-full aspect-[4/3] cursor-pointer"
+        aria-label={`Read ${v.name}'s testimonial`}
+      >
+        {v.image ? (
+          <img src={v.image} alt={v.name} className="absolute inset-0 w-full h-full object-cover" />
+        ) : (
+          <ImagePlaceholder caption="photo" className="absolute inset-0" />
+        )}
+        <div
+          className={`absolute inset-0 flex items-center justify-center p-4 text-center transition-opacity duration-200 ${
+            active ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          }`}
+          style={{ background: 'rgba(36,26,18,0.82)' }}
+        >
+          <p className="text-white text-[12px] leading-[1.55] italic">"{v.quote}"</p>
+        </div>
+      </button>
+
+      <div className="px-4 py-3 space-y-1.5">
+        <div className="flex items-baseline gap-2 border-b border-dashed border-line pb-1">
+          <span className="font-mono text-[9.5px] text-taupe uppercase shrink-0">Name</span>
+          <span className="text-[12.5px] text-umber">{v.name}</span>
+        </div>
+        <div className="flex items-baseline gap-2 border-b border-dashed border-line pb-1">
+          <span className="font-mono text-[9.5px] text-taupe uppercase shrink-0">Role</span>
+          <span className="text-[12.5px] text-umber">{v.role}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Volunteer() {
   return (
     <div>
@@ -205,15 +275,20 @@ export default function Volunteer() {
         ))}
       </div>
 
-      {/* Reviews — full-bleed, one photo slot each */}
-      <div className="bg-white border-y border-line">
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-line">
-          {reviews.map((r) => (
-            <div key={r.name} className="p-9 flex flex-col items-center text-center">
-              <ImagePlaceholder caption="photo" className="w-24 h-24 rounded-full mb-5" />
-              <p className="text-sm leading-[1.6] mb-3">"{r.quote}"</p>
-              <div className="font-mono text-[10.5px] text-umber-soft">{r.name}</div>
-            </div>
+      {/* Real volunteers — Crimson-style "got in" cards, tap/hover photo for their testimonial */}
+      <div className="bg-taupe/10 border-y border-line px-9 py-14">
+        <div className="text-center mb-10 max-w-4xl mx-auto">
+          <div className="font-mono text-[10.5px] text-forest mb-3 lowercase">real volunteers</div>
+          <h2 className="font-display font-bold text-2xl">
+            They got placed. <span className="text-forest">You can too.</span>
+          </h2>
+          <p className="text-[12.5px] text-umber-soft mt-2">
+            Tap or hover a photo to read their story.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto items-stretch">
+          {volunteers.map((v) => (
+            <VolunteerCard key={v.name} v={v} />
           ))}
         </div>
       </div>
