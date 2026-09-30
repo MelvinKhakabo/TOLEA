@@ -65,27 +65,19 @@ function AboutDropdown({ active, theme }: { active?: string; theme: (typeof THEM
         type="button"
         onClick={() => setOpen((o) => !o)}
         className="flex items-center gap-1 cursor-pointer transition-colors"
-        style={{ color: isGroupActive ? '#E8A331' : theme.text, fontWeight: isGroupActive ? 700 : 500 }}
+        style={{ color: isGroupActive ? '#C3D82E' : theme.text, fontWeight: isGroupActive ? 700 : 500 }}
       >
         {aboutTrigger.label}
         <ChevronDown />
       </button>
 
-      {/* The dropdown panel itself always stays a solid white card, regardless
-          of the nav's current theme — same as UKAS's flyout menus. */}
       {open && (
-        <div
-          className="absolute right-0 top-full mt-2 w-44 rounded-md shadow-lg py-1.5 z-20 text-left bg-white"
-          style={{ border: '1px solid #E3DACB' }}
-        >
+        <div className="absolute right-0 top-full mt-2 w-44 rounded-md shadow-lg py-1.5 z-20 text-left bg-white" style={{ border: '1px solid #E3DACB' }}>
           <Link
             to={aboutTrigger.to}
             onClick={() => setOpen(false)}
             className="block px-3.5 py-2 text-[12px] hover:bg-taupe/10"
-            style={{
-              color: active === aboutTrigger.label ? '#E8A331' : '#241A12',
-              fontWeight: active === aboutTrigger.label ? 700 : 400,
-            }}
+            style={{ color: active === aboutTrigger.label ? '#2B6E4F' : '#241A12', fontWeight: active === aboutTrigger.label ? 700 : 400 }}
           >
             About Tolea
           </Link>
@@ -96,7 +88,7 @@ function AboutDropdown({ active, theme }: { active?: string; theme: (typeof THEM
               to={l.to}
               onClick={() => setOpen(false)}
               className="block px-3.5 py-2 text-[12px] hover:bg-taupe/10"
-              style={{ color: active === l.label ? '#E8A331' : '#241A12', fontWeight: active === l.label ? 700 : 400 }}
+              style={{ color: active === l.label ? '#2B6E4F' : '#241A12', fontWeight: active === l.label ? 700 : 400 }}
             >
               {l.label}
             </Link>
@@ -141,8 +133,6 @@ export default function Nav({ active }: { active?: string }) {
       }
     }
 
-    // Re-scan on every route change — each page tags its own sections, and
-    // the DOM for the new page is already committed by the time this runs.
     refreshSections();
     update();
 
@@ -159,40 +149,47 @@ export default function Nav({ active }: { active?: string }) {
   return (
     <div className="fixed top-4 left-4 right-4 z-30 flex justify-center pointer-events-none">
       <div
-        className="w-full max-w-6xl flex items-center justify-between gap-6 px-5 py-3 rounded-full backdrop-blur-md transition-colors duration-300 pointer-events-auto"
+        className="w-full max-w-6xl flex items-center justify-between gap-6 px-5 py-2.5 rounded-full backdrop-blur-md transition-colors duration-300 pointer-events-auto"
         style={{ background: t.pill, border: `1px solid ${t.border}` }}
       >
-        <Link to="/" className="font-display font-bold text-lg shrink-0" style={{ color: t.text }}>
-          tolea<span style={{ color: '#E8A331' }}>.</span>
-        </Link>
+        {/* Left cluster: logo + primary links, grouped together so the
+            space-between only splits space against the right cluster. */}
+        <div className="flex items-center gap-9">
+          <Link to="/" className="font-display font-bold text-lg shrink-0" style={{ color: t.text }}>
+            tolea<span style={{ color: '#C3D82E' }}>.</span>
+          </Link>
 
-        <div className="hidden md:flex gap-6 text-[13px] font-medium">
-          {primaryLinks.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              style={{ color: l.label === active ? '#E8A331' : t.text, fontWeight: l.label === active ? 700 : 500 }}
-            >
-              {l.label}
-            </Link>
-          ))}
+          <div className="hidden md:flex gap-7 text-[13px] font-medium">
+            {primaryLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                style={{ color: l.label === active ? '#C3D82E' : t.text, fontWeight: l.label === active ? 700 : 500 }}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden lg:block pl-4 text-[13px]" style={{ borderLeft: `1px solid ${t.border}`, color: t.textMuted }}>
+        {/* Right cluster: About dropdown + the Login pill. */}
+        <div className="flex items-center gap-5">
+          <div className="hidden lg:block text-[13px]" style={{ color: t.textMuted }}>
             <AboutDropdown active={active} theme={t} />
           </div>
-          <div className="flex items-center gap-2 pl-4" style={{ borderLeft: `1px solid ${t.border}` }}>
-            <Link to="/login" className="flex items-center gap-1.5 font-semibold text-[12.5px]" style={{ color: t.text }}>
-              <span
-                className="w-[18px] h-[18px] rounded-full inline-flex items-center justify-center font-mono text-[8px]"
-                style={{ background: 'rgba(255,255,255,0.22)', color: t.text }}
-              >
-                i
-              </span>
-              Login
-            </Link>
-          </div>
+          <Link
+            to="/login"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full font-semibold text-[12.5px] shrink-0"
+            style={{ background: '#C3D82E', color: '#1d3323' }}
+          >
+            <span
+              className="w-[16px] h-[16px] rounded-full inline-flex items-center justify-center font-mono text-[8px]"
+              style={{ background: 'rgba(29,51,35,0.18)', color: '#1d3323' }}
+            >
+              i
+            </span>
+            Login
+          </Link>
         </div>
       </div>
     </div>
