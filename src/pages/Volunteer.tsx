@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import CtaBanner from '../components/CtaBanner';
@@ -8,16 +8,34 @@ const pathway = [
     step: '01',
     title: 'Every host is checked',
     body: 'Cross-checked against current registration before a listing ever goes live.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+        <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6l7-3z" />
+        <path d="M9 12l2 2l4-4" />
+      </svg>
+    ),
   },
   {
     step: '02',
     title: '3 options, picked for you',
     body: 'Tell us your skills and goals, and we surface your best fits automatically.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+        <rect x="4" y="5" width="16" height="4" rx="1" />
+        <rect x="4" y="11" width="16" height="4" rx="1" />
+        <path d="M8 19h8" />
+      </svg>
+    ),
   },
   {
     step: '03',
     title: 'Evidence, not just experience',
     body: 'Every placement adds tracked, verifiable skills to your profile.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+        <path d="M4 19V5M4 19h16M8 15v-4M12 15V9M16 15v-7" />
+      </svg>
+    ),
   },
 ];
 
@@ -65,6 +83,7 @@ const tracks = [
     price: 'Free, always',
     audience: 'Recent graduates, students, and career-changers based in Kenya.',
     body: 'Full vetting, matching, and placement support at no cost — this is the core Tolea experience, free for every Kenyan volunteer.',
+    accent: 'forest',
     included: [
       'Verified placements only',
       'A guided, Tolea-style interview before matching',
@@ -79,6 +98,7 @@ const tracks = [
     price: 'Paid placement',
     audience: 'Volunteers travelling to Kenya from abroad for a structured placement.',
     body: 'Everything in the Kenyan track, plus the logistics and support layer international travel needs — the placement fee covers vetting, training, and in-country support.',
+    accent: 'marigold',
     included: [
       'Everything in the Kenyan track',
       'Visa and travel documentation guidance',
@@ -93,6 +113,7 @@ const tracks = [
     price: 'Guardian co-sign required',
     audience: "Volunteers under 18 joining with a parent or guardian's consent.",
     body: 'A guardian-consent track layered on top of the standard vetting, with extra safeguarding steps built in before and during the placement.',
+    accent: 'indigo',
     included: [
       'Guardian consent and a co-signed agreement',
       'An additional safeguarding review',
@@ -101,7 +122,28 @@ const tracks = [
       'Guardian included in all major placement communications',
     ],
   },
-];
+] as const;
+
+const accentStyles: Record<string, { border: string; soft: string; tag: string; check: string }> = {
+  forest: {
+    border: 'border-forest',
+    soft: 'bg-forest-soft/50',
+    tag: 'bg-forest text-white',
+    check: 'text-forest',
+  },
+  marigold: {
+    border: 'border-marigold',
+    soft: 'bg-marigold-soft/60',
+    tag: 'bg-marigold text-white',
+    check: 'text-marigold',
+  },
+  indigo: {
+    border: 'border-indigo',
+    soft: 'bg-indigo/10',
+    tag: 'bg-indigo text-white',
+    check: 'text-indigo',
+  },
+};
 
 function ImagePlaceholder({
   caption,
@@ -133,8 +175,16 @@ function FadeLine() {
 
 function PathwayNode({ step }: { step: string }) {
   return (
-    <div className="w-14 h-14 rounded-full bg-forest text-white font-display font-bold text-base flex items-center justify-center shadow-sm shrink-0">
+    <div className="w-16 h-16 rounded-full bg-white text-forest font-display font-bold text-lg flex items-center justify-center shadow-sm shrink-0">
       {step}
+    </div>
+  );
+}
+
+function PathwayIcon({ icon }: { icon: ReactNode }) {
+  return (
+    <div className="w-11 h-11 rounded-xl bg-white/15 text-lime flex items-center justify-center mx-auto mb-3">
+      {icon}
     </div>
   );
 }
@@ -142,9 +192,9 @@ function PathwayNode({ step }: { step: string }) {
 function PathwayConnector() {
   return (
     <div className="flex items-center flex-1 px-2">
-      <div className="h-px flex-1 bg-line" />
-      <span className="text-taupe mx-1.5 text-sm leading-none">→</span>
-      <div className="h-px flex-1 bg-line" />
+      <div className="h-px flex-1 bg-white/30" />
+      <span className="text-white/70 mx-1.5 text-sm leading-none">→</span>
+      <div className="h-px flex-1 bg-white/30" />
     </div>
   );
 }
@@ -155,9 +205,9 @@ function VolunteerCard({ v }: { v: (typeof volunteers)[number] }) {
   const [active, setActive] = useState(false);
 
   return (
-    <div className="border border-line rounded-[10px] bg-white overflow-hidden flex flex-col h-full">
-      <div className="pt-4 pb-2.5 px-3 text-center flex flex-col justify-center min-h-[76px]">
-        <div className="font-sans text-[12px] text-umber-soft">Placed at</div>
+    <div className="border-2 border-forest rounded-[10px] bg-white overflow-hidden flex flex-col h-full">
+      <div className="pt-4 pb-2.5 px-3 text-center flex flex-col justify-center min-h-[76px] bg-forest-soft">
+        <div className="font-sans text-[12px] text-forest/70">Placed at</div>
         <div className="font-display font-bold text-[15px] text-forest leading-tight">
           {v.org}
         </div>
@@ -178,7 +228,7 @@ function VolunteerCard({ v }: { v: (typeof volunteers)[number] }) {
           className={`absolute inset-0 flex items-center justify-center p-4 text-center transition-opacity duration-200 ${
             active ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
           }`}
-          style={{ background: 'rgba(36,26,18,0.82)' }}
+          style={{ background: 'rgba(15,42,30,0.86)' }}
         >
           <p className="text-white text-[12px] leading-[1.55] italic">"{v.quote}"</p>
         </div>
@@ -235,44 +285,50 @@ export default function Volunteer() {
         <FadeLine />
       </div>
 
-      {/* Pathway — connected flow diagram */}
-      <div className="px-9 pt-12 pb-8 text-center">
-        <div className="font-mono text-[10.5px] text-forest mb-3 lowercase">the journey</div>
-        <h2 className="font-display font-bold text-xl">Our Volunteers Pathway</h2>
-      </div>
+      {/* Pathway — connected flow diagram, framed in the hero's forest-green panel */}
+      <div className="px-9 pt-12 pb-12">
+        <div className="max-w-5xl mx-auto rounded-[14px] bg-forest px-10 py-16">
+          <div className="text-center pb-10">
+            <div className="font-mono text-[10.5px] text-lime mb-3 lowercase">the journey</div>
+            <h2 className="font-display font-bold text-2xl text-lime">Our Volunteers Pathway</h2>
+          </div>
 
-      {/* Desktop: horizontal flow */}
-      <div className="hidden md:block px-9 pb-3 max-w-4xl mx-auto">
-        <div className="flex items-center">
-          {pathway.map((p, i) => (
-            <div key={p.step} className="flex items-center flex-1 last:flex-none">
-              <PathwayNode step={p.step} />
-              {i < pathway.length - 1 && <PathwayConnector />}
+          {/* Desktop: horizontal flow */}
+          <div className="hidden md:block pb-5">
+            <div className="flex items-center">
+              {pathway.map((p, i) => (
+                <div key={p.step} className="flex items-center flex-1 last:flex-none">
+                  <PathwayNode step={p.step} />
+                  {i < pathway.length - 1 && <PathwayConnector />}
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <div className="hidden md:grid grid-cols-3 gap-8 text-center">
+            {pathway.map((p) => (
+              <div key={p.step}>
+                <PathwayIcon icon={p.icon} />
+                <h3 className="font-display font-bold text-base mb-1.5 text-lime">{p.title}</h3>
+                <p className="text-[12px] text-white/70 m-0">{p.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile: vertical flow */}
+          <div className="md:hidden flex flex-col items-center">
+            {pathway.map((p, i) => (
+              <div key={p.step} className="flex flex-col items-center">
+                <PathwayNode step={p.step} />
+                <div className="text-center mt-3 mb-1 max-w-[280px]">
+                  <PathwayIcon icon={p.icon} />
+                  <h3 className="font-display font-bold text-base mb-1.5 text-lime">{p.title}</h3>
+                  <p className="text-[12px] text-white/70 m-0">{p.body}</p>
+                </div>
+                {i < pathway.length - 1 && <div className="h-8 w-px bg-white/30 my-2" />}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="hidden md:grid grid-cols-3 gap-6 px-9 pb-12 max-w-4xl mx-auto text-center">
-        {pathway.map((p) => (
-          <div key={p.step}>
-            <h3 className="font-display font-bold text-base mb-1.5">{p.title}</h3>
-            <p className="text-[12px] text-umber-soft m-0">{p.body}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Mobile: vertical flow */}
-      <div className="md:hidden flex flex-col items-center px-9 pb-12">
-        {pathway.map((p, i) => (
-          <div key={p.step} className="flex flex-col items-center">
-            <PathwayNode step={p.step} />
-            <div className="text-center mt-3 mb-1 max-w-[280px]">
-              <h3 className="font-display font-bold text-base mb-1.5">{p.title}</h3>
-              <p className="text-[12px] text-umber-soft m-0">{p.body}</p>
-            </div>
-            {i < pathway.length - 1 && <div className="h-8 w-px bg-line my-2" />}
-          </div>
-        ))}
       </div>
 
       {/* Real volunteers — Crimson-style "got in" cards, tap/hover photo for their testimonial */}
@@ -301,26 +357,41 @@ export default function Volunteer() {
         </h2>
       </div>
       <div className="flex gap-3.5 px-9 pt-3.5 pb-16 flex-col md:flex-row items-stretch">
-        {tracks.map((t) => (
-          <div key={t.name} className="flex-1 border border-line rounded-[10px] p-6 bg-white flex flex-col">
-            <h3 className="font-sans font-bold text-base mb-1">{t.name}</h3>
-            <div className="font-mono text-[10.5px] text-marigold font-semibold mb-3">
-              {t.price}
-            </div>
-            <p className="text-xs text-taupe mb-4 italic">{t.audience}</p>
-            <p className="text-xs text-umber-soft leading-[1.6] mb-5">{t.body}</p>
+        {tracks.map((t) => {
+          const a = accentStyles[t.accent];
+          return (
+            <div
+              key={t.name}
+              className={`flex-1 border-2 ${a.border} ${a.soft} rounded-[10px] flex flex-col overflow-hidden transition-transform hover:-translate-y-0.5`}
+            >
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="font-sans font-bold text-base mb-2">{t.name}</h3>
+                <div
+                  className={`inline-block w-fit font-mono text-[10.5px] font-semibold mb-3 px-2.5 py-1 rounded-full ${a.tag}`}
+                >
+                  {t.price.toUpperCase()}
+                </div>
+                <p className="text-xs text-taupe mb-4 italic">{t.audience}</p>
+                <p className="text-xs text-umber-soft leading-[1.6] mb-5">{t.body}</p>
 
-            <div className="font-mono text-[9.5px] text-taupe uppercase mb-3">what's included</div>
-            <ul className="space-y-2.5 mt-auto">
-              {t.included.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-xs text-umber-soft leading-[1.5]">
-                  <span className="text-forest font-bold mt-0.5">✓</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+                <div className="font-mono text-[9.5px] text-taupe uppercase mb-3">
+                  what's included
+                </div>
+                <ul className="space-y-2.5 mt-auto">
+                  {t.included.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-xs text-umber-soft leading-[1.5]"
+                    >
+                      <span className={`${a.check} font-bold mt-0.5`}>✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <CtaBanner

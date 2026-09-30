@@ -5,13 +5,29 @@ import CtaBanner from '../components/CtaBanner';
 
 type Audience = 'volunteer' | 'organisation';
 
+// Five saturated brand colors cycled across every step/card on this page —
+// no more pastel-on-pastel. accentStyles below maps each key to a solid
+// icon-tile background, a readable foreground, and a matching border/tint
+// for card treatments elsewhere on the page.
+type Accent = 'forest' | 'indigo' | 'marigold' | 'lime' | 'umber';
+
+const accentStyles: Record<
+  Accent,
+  { tile: string; fg: string; border: string; soft: string; dot: string }
+> = {
+  forest: { tile: 'bg-forest', fg: 'text-white', border: 'border-forest', soft: 'bg-forest-soft', dot: '#2B6E4F' },
+  indigo: { tile: 'bg-indigo', fg: 'text-white', border: 'border-indigo', soft: 'bg-indigo-soft', dot: '#233A5E' },
+  marigold: { tile: 'bg-marigold', fg: 'text-umber', border: 'border-marigold', soft: 'bg-marigold-soft', dot: '#E8A331' },
+  lime: { tile: 'bg-lime', fg: 'text-umber', border: 'border-lime', soft: 'bg-lime/15', dot: '#C3D82E' },
+  umber: { tile: 'bg-umber', fg: 'text-lime', border: 'border-umber', soft: 'bg-umber/5', dot: '#241A12' },
+};
+
 const volunteerSteps = [
   {
     num: '01',
     title: 'Apply & get checked',
     body: 'Apply on the platform, and we confirm your track — Kenyan, International, or Minor (15–17, guardian co-signed) — then verify your ID and references before you\'re introduced to any host.',
-    bg: '#E4EEE7',
-    accent: '#2B6E4F',
+    accent: 'forest' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <path d="M4 6h16M4 12h10M4 18h13" />
@@ -22,8 +38,7 @@ const volunteerSteps = [
     num: '02',
     title: 'A real matching conversation',
     body: 'A 20–30 minute chat about your motivation, skills, and availability, then a shortlist of 1–3 verified hosts — followed by a placement offer, signed agreement, and any program fee.',
-    bg: '#E5E9F0',
-    accent: '#233A5E',
+    accent: 'indigo' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6l7-3z" />
@@ -35,8 +50,7 @@ const volunteerSteps = [
     num: '03',
     title: 'Prepare properly',
     body: 'Logistics sorted (Special Pass and insurance for International), a welcome package with your Tolea journal, training on the host and on conduct, then a handover meeting with your supervisor.',
-    bg: '#FBEBD1',
-    accent: '#8a5e13',
+    accent: 'marigold' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <rect x="4" y="4" width="16" height="16" rx="2" />
@@ -48,8 +62,7 @@ const volunteerSteps = [
     num: '04',
     title: 'Supported the whole way',
     body: 'A first-week check to catch early mismatches, then weekly mini reports and wellbeing check-ins, plus monthly community events with other volunteers.',
-    bg: '#FBF6EC',
-    accent: '#241A12',
+    accent: 'lime' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <path d="M4 19V5M4 19h16M8 15v-4M12 15V9M16 15v-7" />
@@ -60,8 +73,7 @@ const volunteerSteps = [
     num: '05',
     title: 'A proper close-out',
     body: 'Feedback from both sides, a send-off ceremony and goodbye package, a completion certificate, and alumni status — or, if it wasn\'t the right fit, re-placement first, refunds where the track allows it.',
-    bg: '#E4EEE7',
-    accent: '#2B6E4F',
+    accent: 'umber' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
@@ -76,8 +88,7 @@ const orgSteps = [
     num: '01',
     title: 'Register your organisation',
     body: 'Tell us who you are, your registration status, and the roles you need filled. Charities go through PBO Act checks; companies need a BRS search, CR12, and KRA PIN.',
-    bg: '#E5E9F0',
-    accent: '#233A5E',
+    accent: 'indigo' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <rect x="5" y="3.5" width="14" height="17" rx="1.5" />
@@ -89,8 +100,7 @@ const orgSteps = [
     num: '02',
     title: 'Get verified',
     body: 'For Verified+, an in-person site visit checks physical safety, supervision capacity, and working conditions before you ever go live — with annual re-verification after that.',
-    bg: '#FBEBD1',
-    accent: '#8a5e13',
+    accent: 'marigold' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6l7-3z" />
@@ -102,8 +112,7 @@ const orgSteps = [
     num: '03',
     title: 'Agreement, then live',
     body: 'A signed agreement covers fees, data sharing, and liability — payment clears before Verified+/Sponsor listings go live — then we match you to volunteers whose skills actually fit.',
-    bg: '#E4EEE7',
-    accent: '#2B6E4F',
+    accent: 'forest' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <circle cx="12" cy="12" r="9" />
@@ -115,8 +124,7 @@ const orgSteps = [
     num: '04',
     title: 'Onboard with safeguards',
     body: 'A named supervisor and safeguarding focal person, holding a Certificate of Good Conduct, agreed before day one — plus a clear path for reporting any incident to us, fast.',
-    bg: '#FBF6EC',
-    accent: '#241A12',
+    accent: 'umber' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <path d="M4 8h13M17 8l-3-3M17 8l-3 3" />
@@ -128,8 +136,7 @@ const orgSteps = [
     num: '05',
     title: 'Stay accountable',
     body: 'Weekly check-ins and end-of-placement feedback flow through us on both sides. Breaches move to offboarding; a host who cancels mid-placement triggers our re-placement/refund policy.',
-    bg: '#E5E9F0',
-    accent: '#233A5E',
+    accent: 'lime' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
@@ -140,18 +147,19 @@ const orgSteps = [
 ];
 
 const included = [
-  { label: 'Document verification', caption: 'ID, references, and a Certificate of Good Conduct, checked before matching' },
-  { label: 'A real matching conversation', caption: 'A 20–30 minute call, not a form into the void' },
-  { label: 'Weekly check-ins', caption: 'Mini reports with a wellbeing check, reviewed by a real person' },
-  { label: 'Confidential complaints channel', caption: 'Raise a concern anytime — hosts aren\'t told without your consent' },
-  { label: 'Safeguarding', caption: 'Named supervisors, a Certificate of Good Conduct, a clear incident pathway' },
-  { label: 'Community events', caption: 'Monthly meetups with other volunteers' },
+  { label: 'Document verification', caption: 'ID, references, and a Certificate of Good Conduct, checked before matching', accent: 'indigo' as Accent },
+  { label: 'A real matching conversation', caption: 'A 20–30 minute call, not a form into the void', accent: 'lime' as Accent },
+  { label: 'Weekly check-ins', caption: 'Mini reports with a wellbeing check, reviewed by a real person', accent: 'marigold' as Accent },
+  { label: 'Confidential complaints channel', caption: 'Raise a concern anytime — hosts aren\'t told without your consent', accent: 'indigo' as Accent },
+  { label: 'Safeguarding', caption: 'Named supervisors, a Certificate of Good Conduct, a clear incident pathway', accent: 'lime' as Accent },
+  { label: 'Community events', caption: 'Monthly meetups with other volunteers', accent: 'marigold' as Accent },
 ];
 
 const eligibility = [
   {
     title: 'Time & duration',
     body: 'Placements are flexible in length — from a school-break stint to an ongoing role.',
+    accent: 'indigo' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <circle cx="12" cy="12" r="9" />
@@ -162,6 +170,7 @@ const eligibility = [
   {
     title: 'Age requirements',
     body: 'Open from age 15+. Under-18s join on the Minor track, with a parent or guardian co-signing every step.',
+    accent: 'marigold' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <circle cx="12" cy="8" r="3.5" />
@@ -172,6 +181,7 @@ const eligibility = [
   {
     title: 'Three tracks',
     body: 'Kenyan (free), International (paid, needs a Kenya Special Pass — not a tourist visa), and Minor (15–17, guardian co-signed).',
+    accent: 'forest' as Accent,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
         <path d="M4 19V5M4 19h16M8 15v-4M12 15V9M16 15v-7" />
@@ -254,9 +264,14 @@ function RotatingHighlight() {
   }, []);
 
   const slide = highlightSlides[index];
+  const slideAccents: Accent[] = ['forest', 'marigold', 'indigo', 'lime'];
+  const a = accentStyles[slideAccents[index % slideAccents.length]];
 
   return (
-    <div className="rounded-[10px] p-7 flex flex-col justify-center" style={{ background: '#F1EAD9', minHeight: '220px' }}>
+    <div
+      className={`rounded-[10px] p-7 flex flex-col justify-center border-2 ${a.border} transition-colors duration-500`}
+      style={{ background: a.dot + '14', minHeight: '220px' }}
+    >
       <style>{`
         @keyframes tolea-fade {
           from { opacity: 0; transform: translateY(4px); }
@@ -268,8 +283,8 @@ function RotatingHighlight() {
           <div className="flex gap-4 items-start">
             <ImagePlaceholder caption="photo" className="w-12 h-12 rounded-full shrink-0" />
             <div>
-              <p className="text-sm leading-[1.6] m-0">"{slide.quote}"</p>
-              <div className="font-mono text-[10.5px] mt-2.5" style={{ color: '#5a5347' }}>
+              <p className="text-sm leading-[1.6] m-0 text-umber">"{slide.quote}"</p>
+              <div className="font-mono text-[10.5px] mt-2.5" style={{ color: a.dot }}>
                 {slide.name}
               </div>
             </div>
@@ -277,18 +292,14 @@ function RotatingHighlight() {
         )}
         {slide.type === 'stat' && (
           <div>
-            <div className="font-display font-extrabold text-4xl mb-2" style={{ color: '#2B6E4F' }}>
+            <div className="font-display font-extrabold text-4xl mb-2" style={{ color: a.dot }}>
               {slide.value}
             </div>
-            <p className="text-sm m-0" style={{ color: '#5a5347' }}>
-              {slide.label}
-            </p>
+            <p className="text-sm m-0 text-umber-soft">{slide.label}</p>
           </div>
         )}
         {slide.type === 'trust' && (
-          <p className="text-sm leading-[1.6] m-0" style={{ color: '#241A12' }}>
-            {slide.line}
-          </p>
+          <p className="text-sm leading-[1.6] m-0 text-umber">{slide.line}</p>
         )}
       </div>
       <div className="flex gap-1.5 mt-6">
@@ -298,7 +309,7 @@ function RotatingHighlight() {
             className="h-1.5 rounded-full transition-all"
             style={{
               width: i === index ? '18px' : '6px',
-              background: i === index ? '#E8A331' : 'rgba(36,26,18,0.2)',
+              background: i === index ? a.dot : 'rgba(36,26,18,0.2)',
             }}
           />
         ))}
@@ -311,32 +322,27 @@ function RotatingHighlight() {
  *  rather than static clip-art. Pure CSS, no library. */
 function FloatingIcon({
   children,
-  bg,
   accent,
   delay = 0,
 }: {
   children: ReactNode;
-  bg: string;
-  accent: string;
+  accent: Accent;
   delay?: number;
 }) {
+  const a = accentStyles[accent];
   return (
     <div
-      className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0"
-      style={{
-        background: bg,
-        color: accent,
-        animation: `tolea-float 3.6s ease-in-out ${delay}s infinite`,
-      }}
+      className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${a.tile} ${a.fg}`}
+      style={{ animation: `tolea-float 3.6s ease-in-out ${delay}s infinite` }}
     >
       {children}
     </div>
   );
 }
 
-function DownArrow() {
+function DownArrow({ color }: { color: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="#8C8073" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-8 mx-auto">
+    <svg viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-8 mx-auto ml-7">
       <path d="M12 3v15M6 13l6 6l6-6" strokeDasharray="3 4" />
     </svg>
   );
@@ -345,23 +351,26 @@ function DownArrow() {
 function StepFlow({ steps }: { steps: typeof volunteerSteps }) {
   return (
     <div className="max-w-2xl mx-auto">
-      {steps.map((s, i) => (
-        <div key={s.num}>
-          <div className="flex gap-5 items-start">
-            <FloatingIcon bg={s.bg} accent={s.accent} delay={i * 0.3}>
-              {s.icon}
-            </FloatingIcon>
-            <div className="pt-1">
-              <div className="font-mono text-[10.5px] mb-1" style={{ color: s.accent }}>
-                Step {s.num}
+      {steps.map((s, i) => {
+        const a = accentStyles[s.accent];
+        return (
+          <div key={s.num}>
+            <div className={`flex gap-5 items-start rounded-[14px] border-2 ${a.border} p-4`} style={{ background: a.dot + '0d' }}>
+              <FloatingIcon accent={s.accent} delay={i * 0.3}>
+                {s.icon}
+              </FloatingIcon>
+              <div className="pt-1">
+                <div className="font-mono text-[10.5px] mb-1 font-semibold" style={{ color: a.dot }}>
+                  Step {s.num}
+                </div>
+                <h3 className="font-display font-bold text-base mb-1.5">{s.title}</h3>
+                <p className="text-[12.5px] text-umber-soft leading-[1.6] m-0">{s.body}</p>
               </div>
-              <h3 className="font-display font-bold text-base mb-1.5">{s.title}</h3>
-              <p className="text-[12.5px] text-umber-soft leading-[1.6] m-0">{s.body}</p>
             </div>
+            {i < steps.length - 1 && <DownArrow color={a.dot} />}
           </div>
-          {i < steps.length - 1 && <DownArrow />}
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -404,7 +413,7 @@ export default function HowWeWork() {
       {/* Audience toggle + step flow */}
       <div className="px-9 pt-16 pb-4">
         <div className="flex justify-center mb-12">
-          <div className="inline-flex rounded-full border border-line bg-white p-1">
+          <div className="inline-flex rounded-full border-2 border-forest bg-white p-1">
             {(
               [
                 ['volunteer', "I'm a volunteer"],
@@ -415,10 +424,10 @@ export default function HowWeWork() {
                 key={value}
                 type="button"
                 onClick={() => setAudience(value)}
-                className="px-5 py-2.5 rounded-full text-[12.5px] font-medium transition-colors cursor-pointer"
+                className="px-5 py-2.5 rounded-full text-[12.5px] font-semibold transition-colors cursor-pointer"
                 style={
                   audience === value
-                    ? { background: '#241A12', color: '#FBF6EC' }
+                    ? { background: '#2B6E4F', color: '#C3D82E' }
                     : { background: 'transparent', color: '#8C8073' }
                 }
               >
@@ -431,27 +440,32 @@ export default function HowWeWork() {
         <StepFlow steps={audience === 'volunteer' ? volunteerSteps : orgSteps} />
       </div>
 
-      {/* What's included — full-bleed dark strip, horizontal scroll like a quick-look carousel */}
-      <div className="mt-16 py-14 px-9" style={{ background: '#233A5E' }}>
+      {/* What's included — full-bleed forest-green strip, matching the hero panel
+          treatment elsewhere on the site, horizontal scroll like a quick-look carousel */}
+      <div className="mt-16 py-14 px-9" style={{ background: '#2B6E4F' }}>
         <h2 className="font-display font-bold text-xl text-center mb-8" style={{ color: '#fff' }}>
           What's included, at a glance
         </h2>
         <div className="flex gap-4 overflow-x-auto pb-2 max-w-6xl mx-auto snap-x snap-mandatory">
-          {included.map((item) => (
-            <div
-              key={item.label}
-              className="shrink-0 w-[190px] snap-start rounded-[10px] p-4"
-              style={{ background: 'rgba(255,255,255,0.08)' }}
-            >
-              <ImagePlaceholder className="aspect-[4/3] rounded-md mb-3" />
-              <h4 className="font-sans font-bold text-[12.5px] mb-1" style={{ color: '#fff' }}>
-                {item.label}
-              </h4>
-              <p className="text-[11px] leading-[1.5] m-0" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                {item.caption}
-              </p>
-            </div>
-          ))}
+          {included.map((item) => {
+            const a = accentStyles[item.accent];
+            return (
+              <div
+                key={item.label}
+                className="shrink-0 w-[190px] snap-start rounded-[10px] p-4 overflow-hidden"
+                style={{ background: 'rgba(255,255,255,0.08)' }}
+              >
+                <div className={`h-1 -mx-4 -mt-4 mb-3 ${a.tile}`} />
+                <ImagePlaceholder className="aspect-[4/3] rounded-md mb-3" />
+                <h4 className="font-sans font-bold text-[12.5px] mb-1" style={{ color: '#fff' }}>
+                  {item.label}
+                </h4>
+                <p className="text-[11px] leading-[1.5] m-0" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                  {item.caption}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -461,29 +475,38 @@ export default function HowWeWork() {
         <h2 className="font-display font-bold text-xl">Who this is for, and when</h2>
       </div>
       <div className="flex gap-4 px-9 pt-8 pb-4 flex-col md:flex-row max-w-4xl mx-auto">
-        {eligibility.map((e) => (
-          <div key={e.title} className="flex-1 border border-line rounded-[10px] p-5 bg-white text-center">
-            <div className="w-11 h-11 rounded-lg bg-forest-soft text-forest flex items-center justify-center mx-auto mb-3">
-              {e.icon}
+        {eligibility.map((e) => {
+          const a = accentStyles[e.accent];
+          return (
+            <div
+              key={e.title}
+              className={`flex-1 border-2 ${a.border} ${a.soft} rounded-[10px] p-5 text-center transition-transform hover:-translate-y-0.5`}
+            >
+              <div className={`w-11 h-11 rounded-lg ${a.tile} ${a.fg} flex items-center justify-center mx-auto mb-3`}>
+                {e.icon}
+              </div>
+              <h3 className="font-sans font-bold text-[13.5px] mb-1.5">{e.title}</h3>
+              <p className="text-[11.5px] text-umber-soft m-0 leading-[1.55]">{e.body}</p>
             </div>
-            <h3 className="font-sans font-bold text-[13.5px] mb-1.5">{e.title}</h3>
-            <p className="text-[11.5px] text-umber-soft m-0 leading-[1.55]">{e.body}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Safety & Support */}
-      <div className="flex gap-9 items-center px-9 pt-16 pb-2 flex-col md:flex-row-reverse max-w-5xl mx-auto">
-        <ImagePlaceholder caption="photography: check-in / supervisor meeting" className="flex-1 w-full h-[240px] rounded-[10px]" />
-        <div className="flex-1">
-          <div className="font-mono text-[10.5px] text-indigo mb-3 lowercase">safety &amp; support</div>
-          <h2 className="font-display font-bold text-xl mb-3">
-            Every placement has a named person accountable for it
-          </h2>
-          <p className="text-[13px] text-umber-soft leading-[1.65] max-w-md">
-            Safeguarding-checked supervisors, weekly check-ins, and a team on both ends who
-            actually respond — not a form you submit into the void.
-          </p>
+      {/* Safety & Support — framed in a solid indigo panel to match the vibrant
+          forest panel on the Volunteer page's pathway section */}
+      <div className="px-9 pt-16 pb-2">
+        <div className="max-w-5xl mx-auto rounded-[14px] bg-indigo px-8 py-10 flex gap-9 items-center flex-col md:flex-row-reverse">
+          <ImagePlaceholder caption="photography: check-in / supervisor meeting" className="flex-1 w-full h-[240px] rounded-[10px]" />
+          <div className="flex-1">
+            <div className="font-mono text-[10.5px] text-lime mb-3 lowercase">safety &amp; support</div>
+            <h2 className="font-display font-bold text-xl mb-3 text-white">
+              Every placement has a named person accountable for it
+            </h2>
+            <p className="text-[13px] text-white/70 leading-[1.65] max-w-md">
+              Safeguarding-checked supervisors, weekly check-ins, and a team on both ends who
+              actually respond — not a form you submit into the void.
+            </p>
+          </div>
         </div>
       </div>
 
