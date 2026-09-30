@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import CtaBanner from '../components/CtaBanner';
@@ -11,69 +11,80 @@ const steps = [
   {
     num: '01',
     title: 'Tell us your goals',
-    body: "A 5-minute questionnaire on your skills, time, and what you want to build. We use your answers to understand your strengths, your availability, and the kind of experience you're actually after — not a generic sign-up form.",
+    body: "A 5-minute questionnaire on your skills, time, and what you want to build — not a generic sign-up form.",
   },
   {
     num: '02',
     title: 'Get matched',
-    body: "We surface your 3 best-fit, verified opportunities. Every match is scored against your skills and goals, and cross-checked against the host's verification status before it ever reaches you.",
+    body: "We surface your 3 best-fit, verified opportunities, cross-checked against the host's verification status.",
   },
   {
     num: '03',
     title: 'Apply and grow',
-    body: 'Apply, get placed, and watch your skills journal fill up. From day one, every task and milestone is tracked, giving you evidence you can point to with future employers.',
+    body: 'Apply, get placed, and watch your skills journal fill up from day one.',
+  },
+];
+
+// Placeholder quotes — swap in real volunteer photos/names as they come in.
+const testimonials = [
+  {
+    quote: "I found my placement in a week, and it was the first time volunteering felt like it was actually building toward something.",
+    name: 'Brian',
+    role: 'Software Volunteer, Nairobi',
+  },
+  {
+    quote: 'The check-ins genuinely felt like someone had my back, not just a formality.',
+    name: 'Patricia',
+    role: 'Community Health Intern',
+  },
+  {
+    quote: 'Coming from abroad, the verification process made it feel safe the whole way through.',
+    name: 'Sofia',
+    role: 'International Volunteer',
+  },
+  {
+    quote: 'The skills journal was the difference — I could point to exactly what I did, not just say I "volunteered somewhere."',
+    name: 'Derek',
+    role: 'Policy Research Intern',
+  },
+  {
+    quote: "Knowing there was a confidential way to raise a concern made it easy to trust the process from day one.",
+    name: 'Amina',
+    role: 'Education Volunteer',
   },
 ];
 
 const wayCards = [
   {
+    tag: 'support',
     title: 'Always-on support',
     body: 'Local mentors and experienced leaders are reachable any time during your placement.',
-    bg: '#E4EEE7',
-    accent: '#2B6E4F',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]">
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3.5 2" />
-      </svg>
-    ),
   },
   {
+    tag: 'verification',
     title: 'Reviewed placements',
     body: "Every host is checked before you're matched, and reviewed again at the midpoint.",
-    bg: '#FBEBD1',
-    accent: '#8a5e13',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]">
-        <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9c-4-1.5-7-4.5-7-9V6l7-3z" />
-        <path d="M9 12l2 2l4-4" />
-      </svg>
-    ),
   },
   {
+    tag: 'fair work',
     title: 'Fair-work standards',
     body: 'Capped hours, clear expectations, and a policy we hold every host to.',
-    bg: '#E5E9F0',
-    accent: '#233A5E',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]">
-        <rect x="5" y="3.5" width="14" height="17" rx="1.5" />
-        <path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5" />
-      </svg>
-    ),
   },
   {
+    tag: 'accountability',
     title: 'Two-way accountability',
     body: 'Feedback flows both ways, and issues are resolved by our team, not left to chance.',
-    bg: '#FBF6EC',
-    accent: '#241A12',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]">
-        <path d="M4 8h13M17 8l-3-3M17 8l-3 3" />
-        <path d="M20 16H7M7 16l3-3M7 16l3 3" />
-      </svg>
-    ),
   },
+];
+
+// Placeholder roster — swap in real partner names/logos when available.
+const partners = [
+  'Partner Organisation',
+  'Partner Organisation',
+  'Partner Organisation',
+  'Partner Organisation',
+  'Partner Organisation',
+  'Partner Organisation',
 ];
 
 const faqs = [
@@ -99,7 +110,12 @@ const faqs = [
   },
 ];
 
-function Marquee({ items }: { items: string[] }) {
+// Shared gradient — used on the hero and now the Partners slab, so the two
+// "bookend" dark cards read as the same family instead of flat vs. rich.
+const DARK_GRADIENT =
+  'radial-gradient(circle at 15% 20%, rgba(195,216,46,0.16), transparent 45%), radial-gradient(circle at 85% 80%, rgba(232,163,49,0.16), transparent 50%), linear-gradient(160deg, #1d4433 0%, #2B6E4F 55%, #163828 100%)';
+
+function Marquee({ items, dark = false }: { items: string[]; dark?: boolean }) {
   const doubled = [...items, ...items];
   return (
     <div
@@ -120,10 +136,10 @@ function Marquee({ items }: { items: string[] }) {
           <span
             key={i}
             className="flex items-center gap-4 font-display font-bold text-xl md:text-2xl whitespace-nowrap"
-            style={{ color: 'rgba(36,26,18,0.75)' }}
+            style={{ color: dark ? 'rgba(255,255,255,0.92)' : 'rgba(36,26,18,0.75)' }}
           >
             {text}
-            <span style={{ color: '#E8A331' }} className="text-base">●</span>
+            <span style={{ color: '#C3D82E' }} className="text-base">●</span>
           </span>
         ))}
       </div>
@@ -131,19 +147,87 @@ function Marquee({ items }: { items: string[] }) {
   );
 }
 
-function RightArrow() {
+
+/** Left column of "How it works" — vertically stacked step cards connected
+ *  by a dotted timeline, sized to sit level with the testimonial card. */
+/** Left column of "How it works" — numbered circle nodes on a dashed
+ *  timeline, generously spaced, cards holding just the content. */
+function StepTimeline() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" style={{ color: '#8C8073' }}>
-      <path d="M5 12h14M13 5l7 7-7 7" />
-    </svg>
+    <div className="flex flex-col h-full">
+      {steps.map((s, i) => (
+        <div key={s.num}>
+          <div className="flex gap-5 items-start">
+            <span
+              className="w-9 h-9 rounded-full flex items-center justify-center font-display font-bold text-[13px] shrink-0"
+              style={{ background: '#2B6E4F', color: '#fff' }}
+            >
+              {s.num}
+            </span>
+            <div className="flex-1 rounded-2xl p-6" style={{ background: '#E4EEE7' }}>
+              <h3 className="font-display font-bold text-lg mb-2">{s.title}</h3>
+              <p className="text-[12.5px] m-0 leading-[1.6]" style={{ color: '#5a5347' }}>
+                {s.body}
+              </p>
+            </div>
+          </div>
+          {i < steps.length - 1 && (
+            <div className="w-9 flex justify-center">
+              <div className="h-12" style={{ borderLeft: '2px dashed rgba(43,110,79,0.35)' }} />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
 
-function DownArrow() {
+/** Right column of "How it works" — a dark-green card cycling through
+ *  volunteer testimonials, round photo frame + quote + dot pagination. */
+function TestimonialCarousel() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => (i + 1) % testimonials.length), 5000);
+    return () => clearInterval(id);
+  }, []);
+
+  const t = testimonials[index];
+
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6" style={{ color: '#8C8073' }}>
-      <path d="M12 5v14M5 13l7 7 7-7" />
-    </svg>
+    <div className="rounded-2xl p-7 flex flex-col h-full" style={{ background: '#2B6E4F' }}>
+      <style>{`
+        @keyframes tolea-fade {
+          from { opacity: 0; transform: translateY(4px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+      <div key={index} className="flex-1 flex flex-col justify-between" style={{ animation: 'tolea-fade 0.5s ease' }}>
+        <div>
+          <ImagePlaceholder caption="photo" className="w-16 h-16 rounded-full mb-5" />
+          <p className="text-sm leading-[1.65] m-0" style={{ color: '#fff' }}>
+            "{t.quote}"
+          </p>
+        </div>
+        <div className="mt-6">
+          <div className="font-sans font-semibold text-[13px]" style={{ color: '#fff' }}>
+            {t.name}
+          </div>
+          <div className="font-mono text-[10.5px]" style={{ color: 'rgba(255,255,255,0.65)' }}>
+            {t.role}
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-1.5 mt-5">
+        {testimonials.map((_, i) => (
+          <span
+            key={i}
+            className="h-1.5 rounded-full transition-all"
+            style={{ width: i === index ? '18px' : '6px', background: i === index ? '#C3D82E' : 'rgba(255,255,255,0.25)' }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -169,6 +253,8 @@ const highlightSlides = [
   },
 ];
 
+/** FAQ sidebar panel — recolored to the same dark-green family as the
+ *  testimonial carousel, instead of the flat light-peach it had before. */
 function RotatingHighlight() {
   const [index, setIndex] = useState(0);
 
@@ -182,7 +268,7 @@ function RotatingHighlight() {
   const slide = highlightSlides[index];
 
   return (
-    <div className="rounded-[10px] p-7 flex flex-col justify-center" style={{ background: '#F1EAD9', minHeight: '220px' }}>
+    <div className="rounded-2xl p-7 flex flex-col justify-center h-full" style={{ background: '#2B6E4F', minHeight: '220px' }}>
       <style>{`
         @keyframes tolea-fade {
           from { opacity: 0; transform: translateY(4px); }
@@ -194,8 +280,10 @@ function RotatingHighlight() {
           <div className="flex gap-4 items-start">
             <ImagePlaceholder caption="photo" className="w-12 h-12 rounded-full shrink-0" />
             <div>
-              <p className="text-sm leading-[1.6] m-0">"{slide.quote}"</p>
-              <div className="font-mono text-[10.5px] mt-2.5" style={{ color: '#5a5347' }}>
+              <p className="text-sm leading-[1.6] m-0" style={{ color: '#fff' }}>
+                "{slide.quote}"
+              </p>
+              <div className="font-mono text-[10.5px] mt-2.5" style={{ color: 'rgba(255,255,255,0.65)' }}>
                 {slide.name}
               </div>
             </div>
@@ -203,16 +291,16 @@ function RotatingHighlight() {
         )}
         {slide.type === 'stat' && (
           <div>
-            <div className="font-display font-extrabold text-4xl mb-2" style={{ color: '#2B6E4F' }}>
+            <div className="font-display font-extrabold text-4xl mb-2" style={{ color: '#C3D82E' }}>
               {slide.value}
             </div>
-            <p className="text-sm m-0" style={{ color: '#5a5347' }}>
+            <p className="text-sm m-0" style={{ color: 'rgba(255,255,255,0.8)' }}>
               {slide.label}
             </p>
           </div>
         )}
         {slide.type === 'trust' && (
-          <p className="text-sm leading-[1.6] m-0" style={{ color: '#241A12' }}>
+          <p className="text-sm leading-[1.6] m-0" style={{ color: '#fff' }}>
             {slide.line}
           </p>
         )}
@@ -224,7 +312,7 @@ function RotatingHighlight() {
             className="h-1.5 rounded-full transition-all"
             style={{
               width: i === index ? '18px' : '6px',
-              background: i === index ? '#E8A331' : 'rgba(36,26,18,0.2)',
+              background: i === index ? '#C3D82E' : 'rgba(255,255,255,0.25)',
             }}
           />
         ))}
@@ -238,46 +326,45 @@ const BAND = '#EFEAE1'; // same tint About uses for its alternating sections
 export default function Home() {
   return (
     <div>
-      {/* Hero — full-bleed, dark overlay, centered */}
-      <div
-        className="relative flex items-center justify-center text-center px-6 py-28 md:py-36"
-        style={{
-          background:
-            'linear-gradient(rgba(36,26,18,0.6), rgba(36,26,18,0.72)), radial-gradient(circle at 30% 30%, rgba(232,163,49,0.35), transparent 55%), radial-gradient(circle at 75% 70%, rgba(43,110,79,0.3), transparent 55%), linear-gradient(135deg, #e9ded0, #cfc3ad)',
-        }}
-      >
-        <div className="max-w-2xl">
-          <div className="font-mono text-[11px] mb-4 lowercase tracking-wide" style={{ color: '#E8A331' }}>
-            free for kenyan volunteers, always
-          </div>
-          <h1 className="font-display font-bold text-white text-[32px] md:text-[46px] leading-[1.15] mb-5">
-            Build real skills. Find your people. Move your future forward.
-          </h1>
-          <p className="text-sm md:text-base leading-[1.65] mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.85)' }}>
-            Tolea matches you with verified organisations across Kenya, and tracks every skill you
-            build along the way.
-          </p>
-          <div className="flex gap-3 justify-center flex-wrap">
-            <Link to="/volunteer">
-              <Button variant="primary">Find your opportunity</Button>
-            </Link>
-            <Link to="/organizations">
-              <button
-                className="font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md"
-                style={{ background: '#fff', color: '#241A12' }}
-              >
-                For organisations
-              </button>
-            </Link>
+      {/* Hero — inset rounded card on the ivory page, not edge-to-edge */}
+      <div data-nav-theme="dark" className="px-4 pt-4 pb-8">
+        <div
+          className="relative overflow-hidden rounded-[28px] flex items-center justify-center text-center px-6 py-28 md:py-36"
+          style={{ background: DARK_GRADIENT }}
+        >
+          <div className="max-w-2xl relative z-10">
+            <div className="font-mono text-[11px] mb-4 lowercase tracking-wide" style={{ color: '#C3D82E' }}>
+              free for kenyan volunteers, always
+            </div>
+            <h1 className="font-display font-bold text-white text-[32px] md:text-[46px] leading-[1.15] mb-5">
+              Build real skills. Find your people. Move your future forward.
+            </h1>
+            <p className="text-sm md:text-base leading-[1.65] mb-8 max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.85)' }}>
+              Tolea matches you with verified organisations across Kenya, and tracks every skill you
+              build along the way.
+            </p>
+            <div className="flex gap-3 justify-center flex-wrap">
+              <Link to="/volunteer">
+                <Button variant="primary">Find your opportunity</Button>
+              </Link>
+              <Link to="/organizations">
+                <button
+                  className="font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md"
+                  style={{ background: '#fff', color: '#241A12' }}
+                >
+                  For organisations
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Stats band */}
-      <div style={{ background: BAND }}>
-        <Marquee items={stats} />
-        <div className="flex items-center gap-3.5 pb-8 px-9">
-          <span className="font-mono text-[10.5px]" style={{ color: '#8C8073' }}>
+      {/* Stats band — full-bleed dark, bookends the hero, lime for numbers/accents */}
+      <div data-nav-theme="dark" className="py-6" style={{ background: '#1d4433' }}>
+        <Marquee items={stats} dark />
+        <div className="flex items-center gap-3.5 px-9 flex-wrap">
+          <span className="font-mono text-[10.5px]" style={{ color: 'rgba(255,255,255,0.55)' }}>
             aligned with the un sdgs
           </span>
           <div className="flex gap-1.5">
@@ -291,14 +378,14 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <Link to="/about" className="text-[11.5px]" style={{ color: '#8C8073' }}>
+          <Link to="/about" className="text-[11.5px] font-medium" style={{ color: '#C3D82E' }}>
             Learn more →
           </Link>
         </div>
       </div>
 
-      {/* How it works — ivory band, full width, left-aligned, with progression arrows */}
-      <div className="px-9 py-14">
+      {/* How it works — left: step timeline, right: testimonial carousel, same height */}
+      <div data-nav-theme="light" className="px-9 py-14">
         <div className="mb-8">
           <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#2B6E4F' }}>
             the process
@@ -308,67 +395,18 @@ export default function Home() {
           </h2>
         </div>
 
-        {/* Desktop: row with arrows between */}
-        <div className="hidden md:flex items-start mb-10">
-          {steps.map((s, i) => (
-            <Fragment key={s.num}>
-              <div className="flex-1">
-                <div className="font-mono text-[11px] mb-2" style={{ color: '#233A5E' }}>
-                  {s.num}
-                </div>
-                <h3 className="font-display font-bold text-lg mb-1.5">{s.title}</h3>
-                <p className="text-[12.5px] m-0" style={{ color: '#5a5347' }}>
-                  {s.body}
-                </p>
-              </div>
-              {i < steps.length - 1 && (
-                <div className="flex items-center justify-center px-4 pt-8 shrink-0">
-                  <RightArrow />
-                </div>
-              )}
-            </Fragment>
-          ))}
-        </div>
-
-        {/* Mobile: stacked with arrows between */}
-        <div className="flex md:hidden flex-col gap-6 mb-10">
-          {steps.map((s, i) => (
-            <Fragment key={s.num}>
-              <div>
-                <div className="font-mono text-[11px] mb-2" style={{ color: '#233A5E' }}>
-                  {s.num}
-                </div>
-                <h3 className="font-display font-bold text-lg mb-1.5">{s.title}</h3>
-                <p className="text-[12.5px] m-0" style={{ color: '#5a5347' }}>
-                  {s.body}
-                </p>
-              </div>
-              {i < steps.length - 1 && (
-                <div className="flex justify-start">
-                  <DownArrow />
-                </div>
-              )}
-            </Fragment>
-          ))}
-        </div>
-
-        {/* Testimonial with photo frame */}
-        <div className="max-w-xl bg-marigold-soft rounded-[10px] px-6.5 py-5.5 flex gap-4 items-start">
-          <ImagePlaceholder caption="photo" className="w-16 h-16 rounded-full shrink-0" />
-          <div>
-            <p className="text-sm leading-[1.6] m-0">
-              "I found my placement in a week, and it was the first time volunteering felt like it
-              was actually building toward something."
-            </p>
-            <div className="font-mono text-[10.5px] mt-2.5" style={{ color: '#5a5347' }}>
-              Early Tolea volunteer, Nairobi
-            </div>
+        <div className="flex flex-col lg:flex-row gap-8 items-stretch">
+          <div className="flex-[1.2]">
+            <StepTimeline />
+          </div>
+          <div className="flex-1">
+            <TestimonialCarousel />
           </div>
         </div>
       </div>
 
-      {/* The Tolea way — tinted band, full width, left-aligned, color-coded cards */}
-      <div style={{ background: BAND }} className="px-9 py-14">
+      {/* The Tolea way — uniform dark cards, lime tag + heading */}
+      <div data-nav-theme="light" style={{ background: BAND }} className="px-9 py-14">
         <div className="mb-8">
           <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#2B6E4F' }}>
             the tolea way
@@ -377,23 +415,20 @@ export default function Home() {
             Safety and support built into every placement
           </h2>
         </div>
-        <div className="flex gap-3.5 flex-col md:flex-row">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {wayCards.map((c) => (
-            <div
-              key={c.title}
-              className="flex-1 rounded-[10px] p-4"
-              style={{ background: c.bg, border: '1px solid rgba(36,26,18,0.08)' }}
-            >
-              <div
-                className="w-[34px] h-[34px] rounded-lg flex items-center justify-center mb-3"
-                style={{ background: 'rgba(255,255,255,0.7)', color: c.accent }}
+            <div key={c.title} className="rounded-2xl p-6 flex flex-col" style={{ background: '#1d4433' }}>
+              <span
+                className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full text-[9.5px] font-mono uppercase mb-5"
+                style={{ background: 'rgba(255,255,255,0.08)', color: '#C3D82E' }}
               >
-                {c.icon}
-              </div>
-              <h3 className="font-sans font-bold text-[13.5px] mb-1.5" style={{ color: '#241A12' }}>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#C3D82E' }} />
+                {c.tag}
+              </span>
+              <h3 className="font-display font-bold text-base mb-2" style={{ color: '#C3D82E' }}>
                 {c.title}
               </h3>
-              <p className="text-[11.5px] m-0 leading-[1.55]" style={{ color: '#5a5347' }}>
+              <p className="text-[12.5px] leading-[1.6] m-0" style={{ color: 'rgba(255,255,255,0.75)' }}>
                 {c.body}
               </p>
             </div>
@@ -401,8 +436,39 @@ export default function Home() {
         </div>
       </div>
 
-      {/* FAQ — ivory band, full width, left-aligned, with rotating highlight beside it */}
-      <div className="py-14 px-9">
+      {/* Partners — same rich gradient as the hero, not a flat fill */}
+      <div data-nav-theme="dark" className="px-4 pb-4">
+        <div className="rounded-[28px] px-9 py-14" style={{ background: DARK_GRADIENT }}>
+          <div className="max-w-2xl mx-auto text-center mb-8">
+            <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#C3D82E' }}>
+              our partners
+            </div>
+            <h2 className="font-display font-bold text-2xl mb-3" style={{ color: '#fff' }}>
+              Trusted by organisations across Kenya
+            </h2>
+            <p className="text-[12.5px] leading-[1.6] m-0" style={{ color: 'rgba(255,255,255,0.65)' }}>
+              Tolea partners with verified host organisations across Nairobi and beyond — real
+              names and logos go here as more organisations come on board.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+            {partners.map((name, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-center px-8 py-6 rounded-xl min-w-[160px]"
+                style={{ background: 'rgba(255,255,255,0.08)' }}
+              >
+                <span className="font-mono text-[11px]" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                  {name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ — ivory band, full width, left-aligned, with the dark rotating panel beside it */}
+      <div data-nav-theme="light" className="py-14 px-9">
         <div className="mb-8">
           <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#2B6E4F' }}>
             faqs

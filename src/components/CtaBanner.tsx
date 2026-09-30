@@ -32,52 +32,54 @@ export default function CtaBanner({
   secondaryHref?: string;
 }) {
   return (
-    <div className="px-9 py-16 text-center" style={{ background: '#F1EAD9' }}>
-      {eyebrow && (
-        <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#2B6E4F' }}>
-          {eyebrow}
-        </div>
-      )}
-      <h2
-        className="font-display font-bold text-2xl md:text-3xl max-w-2xl mx-auto mb-7"
-        style={{ color: '#241A12' }}
-      >
-        {headline}
-      </h2>
-      <div className="flex flex-col items-center gap-2.5">
-        {secondaryButtonLabel && secondaryButtonTo ? (
-          <div className="flex flex-wrap items-center justify-center gap-3">
+    <div data-nav-theme="light" className="px-4 pb-4">
+      <div className="rounded-[28px] px-9 py-16 text-center" style={{ background: '#C3D82E' }}>
+        {eyebrow && (
+          <div className="font-mono text-[10.5px] mb-3 lowercase" style={{ color: '#1d4433' }}>
+            {eyebrow}
+          </div>
+        )}
+        <h2
+          className="font-display font-bold text-2xl md:text-3xl max-w-2xl mx-auto mb-7"
+          style={{ color: '#1d3323' }}
+        >
+          {headline}
+        </h2>
+        <div className="flex flex-col items-center gap-2.5">
+          {secondaryButtonLabel && secondaryButtonTo ? (
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Link to={to}>
+                <Button variant="primary">{buttonLabel}</Button>
+              </Link>
+              <Link to={secondaryButtonTo}>
+                <button
+                  className="font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md cursor-pointer bg-white"
+                  style={{ color: '#241A12', border: '1px solid rgba(36,26,18,0.15)' }}
+                >
+                  {secondaryButtonLabel}
+                </button>
+              </Link>
+            </div>
+          ) : (
             <Link to={to}>
               <Button variant="primary">{buttonLabel}</Button>
             </Link>
-            <Link to={secondaryButtonTo}>
-              <button
-                className="font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md cursor-pointer bg-white"
-                style={{ color: '#241A12', border: '1px solid rgba(36,26,18,0.15)' }}
-              >
-                {secondaryButtonLabel}
-              </button>
-            </Link>
-          </div>
-        ) : (
-          <Link to={to}>
-            <Button variant="primary">{buttonLabel}</Button>
-          </Link>
-        )}
-        {!secondaryButtonLabel && secondaryLinkLabel && secondaryHref && (
-          <div className="text-[11.5px]" style={{ color: 'rgba(36,26,18,0.65)' }}>
-            {secondaryText}{' '}
-            {secondaryHref.startsWith('mailto:') || secondaryHref.startsWith('http') ? (
-              <a href={secondaryHref} className="underline cursor-pointer" style={{ color: '#241A12' }}>
-                {secondaryLinkLabel}
-              </a>
-            ) : (
-              <Link to={secondaryHref} className="underline cursor-pointer" style={{ color: '#241A12' }}>
-                {secondaryLinkLabel}
-              </Link>
-            )}
-          </div>
-        )}
+          )}
+          {!secondaryButtonLabel && secondaryLinkLabel && secondaryHref && (
+            <div className="text-[11.5px]" style={{ color: 'rgba(29,68,51,0.75)' }}>
+              {secondaryText}{' '}
+              {secondaryHref.startsWith('mailto:') || secondaryHref.startsWith('http') ? (
+                <a href={secondaryHref} className="underline cursor-pointer" style={{ color: '#1d3323' }}>
+                  {secondaryLinkLabel}
+                </a>
+              ) : (
+                <Link to={secondaryHref} className="underline cursor-pointer" style={{ color: '#1d3323' }}>
+                  {secondaryLinkLabel}
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
