@@ -1,4 +1,6 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
+import Honeypot from '../components/Honeypot';
+import { submitContactMessage } from '../lib/api/leads';
 
 const CONTACT_EMAIL = 'tolea.community@gmail.com';
 
@@ -94,17 +96,31 @@ const contactPoints: {
 export default function Contact() {
   const [form, setForm] = useState<ContactForm>(emptyForm);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [hp, setHp] = useState('');
 
   function update<K extends keyof ContactForm>(key: K, value: ContactForm[K]) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    // TODO: replace with a real submit once the backend exists, e.g.
-    // await supabase.from('contact_messages').insert(form)
-    console.log('contact form submitted', form);
-    setSubmitted(true);
+    if (hp) {
+      // Honeypot tripped — a bot. Pretend it worked, send nothing.
+      setSubmitted(true);
+      return;
+    }
+    setSubmitting(true);
+    setError('');
+    try {
+      await submitContactMessage(form);
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -163,7 +179,8 @@ export default function Contact() {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 border-2 border-indigo rounded-[10px] p-6 bg-indigo-soft/40">
+              <form onSubmit={handleSubmit} className="relative space-y-4 border-2 border-indigo rounded-[10px] p-6 bg-indigo-soft/40">
+                <Honeypot value={hp} onChange={setHp} />
                 <div className="grid sm:grid-cols-2 gap-4">
                   <Field label="Your name" required>
                     <input
@@ -212,11 +229,17 @@ export default function Contact() {
                     placeholder="Tell us a bit about what you need."
                   />
                 </Field>
+                {error && (
+                  <p role="alert" className="text-[12.5px] text-umber bg-marigold-soft border border-marigold rounded-md px-3.5 py-2.5">
+                    {error}
+                  </p>
+                )}
                 <button
                   type="submit"
-                  className="font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md cursor-pointer bg-marigold text-umber w-full sm:w-auto"
+                  disabled={submitting}
+                  className="font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md cursor-pointer bg-marigold text-umber w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Send message
+                  {submitting ? 'Sending…' : 'Send message'}
                 </button>
               </form>
             )}
