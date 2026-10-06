@@ -17,6 +17,10 @@ const accentStyles: Record<
   lime: { tile: 'bg-lime', fg: 'text-umber', border: 'border-lime', soft: 'bg-lime/15', eyebrow: 'text-forest' },
 }
 
+// Same dark-green hero treatment used on Home/Organizations/Donate.
+const DARK_GRADIENT =
+  'radial-gradient(circle at 15% 20%, rgba(195,216,46,0.16), transparent 45%), radial-gradient(circle at 85% 80%, rgba(232,163,49,0.16), transparent 50%), linear-gradient(160deg, #1d4433 0%, #2B6E4F 55%, #163828 100%)'
+
 const team: { name: string; role: string; accent: Accent }[] = [
   { name: 'Co-founder name', role: 'Co-founder & CEO', accent: 'forest' },
   { name: 'Co-founder name', role: 'Co-founder & CTO', accent: 'indigo' },
@@ -29,24 +33,32 @@ export default function About() {
 
   return (
     <div className="bg-ivory">
-      {/* Our story */}
-      <section className="px-6 sm:px-9 lg:px-16 pt-12 pb-8">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <p className="font-mono text-[11px] text-forest lowercase mb-3">our story</p>
-            <h1 className="font-display text-4xl font-bold leading-tight mb-5">
-              Built for the first opportunity that never came easily.
-            </h1>
-            <p className="text-sm text-umber/70 leading-relaxed max-w-xl">
-              Tolea started with a simple observation: Kenyan graduates were finding
-              volunteer and internship work through scattered WhatsApp groups and word
-              of mouth, with no way to know whether a placement was legitimate, fair, or
-              actually going to build a real skill. We set out to build the trusted,
-              structured alternative.
-            </p>
-          </div>
-          <div className="rounded-lg aspect-video bg-gradient-to-br from-marigold/30 via-forest/20 to-taupe/30 flex items-end p-3">
-            <span className="font-mono text-xs text-umber/60">photo/video: our story</span>
+      {/* Our story — floating dark-green hero panel, same treatment as
+          Home/Organizations/Donate, holding the story text and photo */}
+      <section data-nav-theme="dark" className="px-4 pt-4 pb-8">
+        <div
+          className="relative overflow-hidden rounded-[28px] px-6 sm:px-9 lg:px-16 py-20 md:py-28"
+          style={{ background: DARK_GRADIENT }}
+        >
+          <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="font-mono text-[11px] lowercase mb-3 tracking-wide" style={{ color: '#C3D82E' }}>
+                our story
+              </p>
+              <h1 className="font-display text-4xl font-bold leading-tight mb-5 text-white">
+                Built for the first opportunity that never came easily.
+              </h1>
+              <p className="text-sm leading-relaxed max-w-xl" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                Tolea started with a simple observation: Kenyan graduates were finding
+                volunteer and internship work through scattered WhatsApp groups and word
+                of mouth, with no way to know whether a placement was legitimate, fair, or
+                actually going to build a real skill. We set out to build the trusted,
+                structured alternative.
+              </p>
+            </div>
+            <div className="rounded-lg aspect-video bg-gradient-to-br from-marigold/30 via-forest/20 to-taupe/30 flex items-end p-3 ring-1 ring-white/20">
+              <span className="font-mono text-xs text-white/70">photo/video: our story</span>
+            </div>
           </div>
         </div>
       </section>

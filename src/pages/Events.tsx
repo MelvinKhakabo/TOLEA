@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import CtaBanner from '../components/CtaBanner';
 
+// Same dark-green hero treatment used on Home/About/Donate.
+const DARK_GRADIENT =
+  'radial-gradient(circle at 15% 20%, rgba(195,216,46,0.16), transparent 45%), radial-gradient(circle at 85% 80%, rgba(232,163,49,0.16), transparent 50%), linear-gradient(160deg, #1d4433 0%, #2B6E4F 55%, #163828 100%)'
+
 type Mode = 'Online' | 'In-person';
 type Accent = 'forest' | 'indigo' | 'marigold';
 
@@ -142,21 +146,31 @@ export default function Events() {
 
   return (
     <div>
-      {/* Hero — intro text with a community photo alongside it, same
-          two-column treatment as the About page's "our story" section */}
-      <div className="px-6 sm:px-9 lg:px-16 pt-12 pb-10">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="font-mono text-[10.5px] text-forest mb-3 lowercase">community</div>
-            <h1 className="font-display font-bold text-[32px] leading-[1.15] mb-4">
-              Where the Tolea community shows up
-            </h1>
-            <p className="text-[13.5px] text-[#4a4038] leading-[1.65]">
-              From orientation sessions to monthly meetups, this is where volunteers and hosts
-              connect beyond a single placement.
-            </p>
+      {/* Hero — floating dark-green panel, same treatment as Home/About/Donate,
+          holding the intro text and community photo */}
+      <div data-nav-theme="dark" className="px-4 pt-4 pb-8">
+        <div
+          className="relative overflow-hidden rounded-[28px] px-6 sm:px-9 lg:px-16 py-20 md:py-28"
+          style={{ background: DARK_GRADIENT }}
+        >
+          <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="font-mono text-[11px] mb-3 lowercase tracking-wide" style={{ color: '#C3D82E' }}>
+                community
+              </div>
+              <h1 className="font-display font-bold text-[32px] leading-[1.15] mb-4 text-white">
+                Where the Tolea community shows up
+              </h1>
+              <p className="text-[13.5px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                From orientation sessions to monthly meetups, this is where volunteers and hosts
+                connect beyond a single placement.
+              </p>
+            </div>
+            <ImagePlaceholder
+              caption="photo: community hangout, Nairobi"
+              className="rounded-lg aspect-video ring-1 ring-white/20"
+            />
           </div>
-          <ImagePlaceholder caption="photo: community hangout, Nairobi" className="rounded-lg aspect-video" />
         </div>
       </div>
 

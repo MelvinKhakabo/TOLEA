@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import CtaBanner from '../components/CtaBanner';
 
+// Same dark-green hero treatment used on Home/About/Donate.
+const DARK_GRADIENT =
+  'radial-gradient(circle at 15% 20%, rgba(195,216,46,0.16), transparent 45%), radial-gradient(circle at 85% 80%, rgba(232,163,49,0.16), transparent 50%), linear-gradient(160deg, #1d4433 0%, #2B6E4F 55%, #163828 100%)'
+
 type Audience = 'volunteer' | 'organisation';
 
 // Five saturated brand colors cycled across every step/card on this page —
@@ -387,31 +391,46 @@ export default function HowWeWork() {
         }
       `}</style>
 
-      {/* Hero */}
-      <div className="flex gap-9 items-center px-9 pt-[52px] flex-col md:flex-row">
-        <div className="flex-[1.1] w-full">
-          <div className="font-mono text-[10.5px] text-forest mb-3 lowercase">the process</div>
-          <h1 className="font-display font-bold text-[34px] leading-[1.15] mb-4">
-            From first message to placement — the whole journey, mapped out.
-          </h1>
-          <p className="text-[13.5px] text-[#4a4038] leading-[1.65] mb-5 max-w-[420px]">
-            No fine print to dig through. Here's exactly what happens at every step, whether
-            you're volunteering with us or hosting a volunteer.
-          </p>
-          <div className="flex gap-2.5">
-            <Link to="/volunteer">
-              <Button variant="primary">I'm volunteering</Button>
-            </Link>
-            <Link to="/organizations">
-              <Button variant="secondary">I'm hosting</Button>
-            </Link>
+      {/* Hero — floating dark-green panel, same treatment as Home/About/Donate */}
+      <div data-nav-theme="dark" className="px-4 pt-4 pb-8">
+        <div
+          className="relative overflow-hidden rounded-[28px] px-6 sm:px-9 lg:px-16 py-20 md:py-28"
+          style={{ background: DARK_GRADIENT }}
+        >
+          <div className="relative z-10 max-w-6xl mx-auto flex gap-9 items-center flex-col md:flex-row">
+            <div className="flex-[1.1] w-full">
+              <div className="font-mono text-[11px] mb-3 lowercase tracking-wide" style={{ color: '#C3D82E' }}>
+                the process
+              </div>
+              <h1 className="font-display font-bold text-[34px] leading-[1.15] mb-4 text-white">
+                From first message to placement — the whole journey, mapped out.
+              </h1>
+              <p className="text-[13.5px] leading-[1.65] mb-6 max-w-[420px]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                No fine print to dig through. Here's exactly what happens at every step, whether
+                you're volunteering with us or hosting a volunteer.
+              </p>
+              <div className="flex gap-2.5 flex-wrap">
+                <Link to="/volunteer">
+                  <Button variant="primary">I'm volunteering</Button>
+                </Link>
+                <Link
+                  to="/organizations"
+                  className="inline-flex items-center border-2 border-white/70 text-white font-medium text-sm px-5 py-2.5 rounded-md hover:bg-white/10 transition-colors"
+                >
+                  I'm hosting
+                </Link>
+              </div>
+            </div>
+            <ImagePlaceholder
+              caption="photography: volunteer + host, working together"
+              className="flex-1 w-full h-[280px] rounded-[10px] ring-1 ring-white/20"
+            />
           </div>
         </div>
-        <ImagePlaceholder caption="photography: volunteer + host, working together" className="flex-1 w-full h-[280px] rounded-[10px]" />
       </div>
 
       {/* Audience toggle + step flow */}
-      <div className="px-9 pt-16 pb-4">
+      <div className="px-9 pt-10 pb-4">
         <div className="flex justify-center mb-12">
           <div className="inline-flex rounded-full border-2 border-forest bg-white p-1">
             {(
