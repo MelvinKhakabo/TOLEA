@@ -186,7 +186,7 @@ export default function OrganizationRegister() {
   }
 
   return (
-    <div className="px-6 sm:px-9 lg:px-16 py-14">
+    <div className="px-6 sm:px-9 lg:px-16 pt-32 pb-14">
       <div className="max-w-2xl mx-auto text-center mb-8">
         <div className="font-mono text-[10.5px] text-indigo mb-3 lowercase">for organisations</div>
         <h1 className="font-display font-bold text-2xl mb-3">
