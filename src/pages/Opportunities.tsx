@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CtaBanner from '../components/CtaBanner'
+import {
+  ApplyError,
+  ProfileIncompleteError,
+  applyToOpportunity,
+  getMyApplications,
+  type ApplicationStatus,
+} from '../lib/api/applications'
 import { getOpportunities, type Opportunity } from '../lib/api/opportunities'
+import { useAuth } from '../lib/auth/context'
 
 // Same dark-green hero treatment used on Home/About/Donate.
 const DARK_GRADIENT =
@@ -22,7 +30,68 @@ function ModeTag({ mode }: { mode: Opportunity['mode'] }) {
   return <span className={`font-mono text-[9.5px] uppercase px-2 py-1 rounded text-white ${bg}`}>{mode}</span>
 }
 
-function OpportunityCard({ o, index }: { o: Opportunity; index: number }) {
+function ApplyButton({
+  authed,
+  status,
+  applying,
+  onApply,
+}: {
+  authed: boolean
+  status?: ApplicationStatus
+  applying: boolean
+  onApply: () => void
+}) {
+  if (!authed) {
+    return (
+      <Link
+        to="/signup"
+        className="inline-block bg-marigold text-umber font-sans font-semibold text-[13px] px-4 py-2.5 rounded-md hover:opacity-90 transition-opacity"
+      >
+        Sign up to apply
+      </Link>
+    )
+  }
+  if (status === 'needs_guardian_consent') {
+    return (
+      <span className="inline-block bg-indigo-soft text-indigo border border-indigo font-sans font-semibold text-[12px] px-3.5 py-2 rounded-md">
+        Applied — guardian consent needed
+      </span>
+    )
+  }
+  if (status) {
+    return (
+      <span className="inline-block bg-forest text-white font-sans font-semibold text-[13px] px-4 py-2.5 rounded-md">
+        Applied ✓
+      </span>
+    )
+  }
+  return (
+    <button
+      type="button"
+      onClick={onApply}
+      disabled={applying}
+      className="bg-marigold text-umber font-sans font-semibold text-[13px] px-4 py-2.5 rounded-md hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-60"
+    >
+      {applying ? 'Applying…' : 'Apply now'}
+    </button>
+  )
+}
+
+function OpportunityCard({
+  o,
+  index,
+  authed,
+  status,
+  applying,
+  onApply,
+}: {
+  o: Opportunity
+  index: number
+  authed: boolean
+  status?: ApplicationStatus
+  applying: boolean
+  onApply: () => void
+}) {
   const [open, setOpen] = useState(false)
   const isSample = o.description?.startsWith(SAMPLE_MARKER) ?? false
   const description = (o.description ?? '').replace(SAMPLE_MARKER, '')
@@ -86,12 +155,7 @@ function OpportunityCard({ o, index }: { o: Opportunity; index: number }) {
         )}
 
         <div className="mt-auto pt-1">
-          <Link
-            to="/signup"
-            className="inline-block bg-marigold text-umber font-sans font-semibold text-[13px] px-4 py-2.5 rounded-md hover:opacity-90 transition-opacity"
-          >
-            Sign up to apply
-          </Link>
+          <ApplyButton authed={authed} status={status} applying={applying} onApply={onApply} />
         </div>
       </div>
     </article>
@@ -114,6 +178,12 @@ function SkeletonCard() {
 }
 
 export default function Opportunities() {
+  const { user, profile, profileIncomplete } = useAuth()
+  const navigate = useNavigate()
+  const [myApps, setMyApps] = useState<Record<string, ApplicationStatus>>({})
+  const [applyingId, setApplyingId] = useState<string | null>(null)
+  const [applyError, setApplyError] = useState('')
+
   const [items, setItems] = useState<Opportunity[] | null>(null)
   const [error, setError] = useState(false)
   const [attempt, setAttempt] = useState(0)
@@ -133,6 +203,34 @@ export default function Opportunities() {
       cancelled = true
     }
   }, [attempt])
+
+  const userId = user?.id
+  useEffect(() => {
+    if (!userId) return
+    let cancelled = false
+    getMyApplications().then((apps) => !cancelled && setMyApps(apps))
+    return () => {
+      cancelled = true
+    }
+  }, [userId])
+
+  async function handleApply(id: string) {
+    setApplyError('')
+    if (profileIncomplete) {
+      navigate('/complete-profile')
+      return
+    }
+    setApplyingId(id)
+    try {
+      const status = await applyToOpportunity(id)
+      setMyApps((prev) => ({ ...prev, [id]: status }))
+    } catch (err) {
+      if (err instanceof ProfileIncompleteError) navigate('/complete-profile')
+      else setApplyError(err instanceof ApplyError ? err.message : 'We couldn’t submit your application. Please try again.')
+    } finally {
+      setApplyingId(null)
+    }
+  }
 
   const locations = useMemo(
     () => Array.from(new Set((items ?? []).map((o) => o.location).filter((l): l is string => !!l))).sort(),
@@ -188,16 +286,19 @@ export default function Opportunities() {
               Verified placements, ready when you are
             </h1>
             <p className="text-[13.5px] leading-[1.65] max-w-xl mx-auto mb-6" style={{ color: 'rgba(255,255,255,0.85)' }}>
-              Browse every open role below. Each host is checked before its listing goes live — create
-              a free account when you're ready to apply.
+              {user
+                ? `Welcome${profile?.full_name ? `, ${profile.full_name.split(' ')[0]}` : ''}. Every host below is checked before its listing goes live — apply to any role that fits.`
+                : 'Browse every open role below. Each host is checked before its listing goes live — create a free account when you\'re ready to apply.'}
             </p>
             <div className="flex gap-2.5 justify-center flex-wrap">
-              <Link
-                to="/signup"
-                className="inline-block bg-marigold text-umber font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md hover:opacity-90 transition-opacity"
-              >
-                Create your free account
-              </Link>
+              {!user && (
+                <Link
+                  to="/signup"
+                  className="inline-block bg-marigold text-umber font-sans font-semibold text-[13.5px] px-5 py-3 rounded-md hover:opacity-90 transition-opacity"
+                >
+                  Create your free account
+                </Link>
+              )}
               <Link
                 to="/how-we-work"
                 className="inline-flex items-center border-2 border-white/70 text-white font-medium text-[13.5px] px-5 py-2.5 rounded-md hover:bg-white/10 transition-colors"
@@ -271,6 +372,15 @@ export default function Opportunities() {
       {/* Results */}
       <div className="px-6 sm:px-9 lg:px-16 pt-6 pb-16">
         <div className="max-w-6xl mx-auto">
+          {applyError && (
+            <p
+              role="alert"
+              className="text-[12.5px] text-umber bg-marigold-soft border border-marigold rounded-md px-3.5 py-2.5 mb-4"
+            >
+              {applyError}
+            </p>
+          )}
+
           {items && !error && (
             <div className="flex items-center justify-between mb-4">
               <p className="font-mono text-[11px] text-taupe m-0">
@@ -346,21 +456,31 @@ export default function Opportunities() {
           {!error && filtered.length > 0 && (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {filtered.map((o, i) => (
-                <OpportunityCard key={o.id} o={o} index={i} />
+                <OpportunityCard
+                  key={o.id}
+                  o={o}
+                  index={i}
+                  authed={Boolean(user)}
+                  status={myApps[o.id]}
+                  applying={applyingId === o.id}
+                  onApply={() => handleApply(o.id)}
+                />
               ))}
             </div>
           )}
         </div>
       </div>
 
-      <CtaBanner
-        eyebrow="not seeing the right fit?"
-        headline="Tell us what you want to grow into"
-        buttonLabel="Create your free account"
-        to="/signup"
-        secondaryLinkLabel="Contact us"
-        secondaryHref="/contact"
-      />
+      {!user && (
+        <CtaBanner
+          eyebrow="not seeing the right fit?"
+          headline="Tell us what you want to grow into"
+          buttonLabel="Create your free account"
+          to="/signup"
+          secondaryLinkLabel="Contact us"
+          secondaryHref="/contact"
+        />
+      )}
     </div>
   )
 }
